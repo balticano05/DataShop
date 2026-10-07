@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "firsttris.JestRunner",
+    "humao.rest-client",
+    "mikestead.dotenv",
+    "usernamehw.errorlens",
+    "eamodio.gitlens"
+  ]
+}

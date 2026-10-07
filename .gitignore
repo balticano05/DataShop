@@ -19,7 +19,9 @@ coverage/
 Thumbs.db
 
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 *.swp
 *.swo
 
@@ -29,3 +31,4 @@ tmp/
 # Credentials (не коммитить)
 doc/Cloudinary.txt
 doc/Neon.txt
+*.tsbuildinfo

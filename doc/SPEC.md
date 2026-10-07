@@ -16,7 +16,7 @@
 
 ## Эпик 2. Каркас NestJS (6–15)
 
-6. **Создать NestJS-проект `backend`** — `nest new backend`, удалить лишние модули.
+6. [x] **Создать NestJS-проект `backend`** — `nest new backend`, удалить лишние модули.
 7. **Подключить `@nestjs/config` и `joi`** — конфиг через `ConfigModule.forRoot({ isGlobal: true })`.
 8. **Создать `configuration.ts` и `env.validation.ts`** — типизированный доступ к env и Joi-схема с обязательными переменными.
 9. **Настроить `main.ts`** — префикс `/api`, `helmet`, `shutdown hooks`, `x-powered-by` отключён.
