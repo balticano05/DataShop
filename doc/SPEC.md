@@ -6,10 +6,9 @@
 
 ## Эпик 1. Подготовка репозитория и окружения (1–5)
 
-1. **Создать git-репозиторий `datashop`** — инициализировать, подключить remote, сделать первый коммит `chore: init repository`.
-2. **Создать ветки `main` и `develop`** — `main` только для релизов, вся разработка через `develop`.
-3. **Добавить `.gitignore`, `.editorconfig`, `.env.example`** — исключить `node_modules`, `dist`, `.env`; шабл
-он переменных окружения в репозитории.
+1. [x] **Создать git-репозиторий `datashop`** — инициализировать, подключить remote, сделать первый коммит `chore: init repository`.
+2. [x] **Создать ветки `main` и `develop`** — `main` только для релизов, вся разработка через `develop`.
+3. [x] **Добавить `.gitignore`, `.editorconfig`, `.env.example`** — исключить `node_modules`, `dist`, `.env`; шаблон переменных окружения в репозитории.
 4. **Настроить ESLint, Prettier, strict TypeScript, Conventional Commits** — единый стиль, шаблон PR, обязательные префиксы `feat:`, `fix:`, `chore:`, `refactor:`.
 5. **Завести аккаунты Neon, Cloudinary, Render, Redis (Render KV / Upstash)** — установить Node.js LTS, Nest CLI, Docker Desktop, собрать все credentials в локальный `.env`.
 
