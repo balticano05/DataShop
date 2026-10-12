@@ -1,20 +1,24 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import Joi from 'joi';
+import { LoggerModule } from 'nestjs-pino';
+import configuration from './config/configuration.js';
+import { envValidationSchema } from './config/env.validation.js';
+import { loggerConfig } from './config/logger.config.js';
+import { DatabaseModule } from './database/database.module.js';
+import { HealthModule } from './health/health.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: Joi.object({
-        PORT: Joi.number().port().default(3000),
-        NODE_ENV: Joi.string()
-          .valid('development', 'production', 'test')
-          .default('development'),
-      }),
+      cache: true,
+      envFilePath: ['../.env', '.env'],
+      load: [configuration],
+      validationSchema: envValidationSchema,
     }),
+    LoggerModule.forRoot(loggerConfig),
+    DatabaseModule,
+    HealthModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

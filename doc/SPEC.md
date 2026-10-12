@@ -18,34 +18,34 @@
 
 6. [x] **Создать NestJS-проект `backend`** — `nest new backend`, удалить лишние модули.
 7. [x] **Подключить `@nestjs/config` и `joi`** — конфиг через `ConfigModule.forRoot({ isGlobal: true })`.
-8. **Создать `configuration.ts` и `env.validation.ts`** — типизированный доступ к env и Joi-схема с обязательными переменными.
-9. **Настроить `main.ts`** — префикс `/api`, `helmet`, `shutdown hooks`, `x-powered-by` отключён.
-10. **Включить глобальный `ValidationPipe`** — `whitelist`, `forbidNonWhitelisted`, `transform`.
-11. **Создать `AllExceptionsFilter`** — единый формат ошибок `{ statusCode, error, message, path, timestamp }`.
-12. **Подключить `nestjs-pino`** — структурные логи, без паролей и токенов.
-13. **Настроить CORS по whitelist** — `CORS_ORIGINS` из env, без `*`.
-14. **Создать `HealthModule`** — `/api/health` с проверкой БД и Redis.
-15. **Проверить запуск приложения** — `GET /api/health` возвращает 200, при отсутствии обязательной переменной приложение не стартует.
+8. [x] **Создать `configuration.ts` и `env.validation.ts`** — типизированный доступ к env и Joi-схема с обязательными переменными.
+9. [x] **Настроить `main.ts`** — префикс `/api`, `helmet`, `shutdown hooks`, `x-powered-by` отключён.
+10. [x] **Включить глобальный `ValidationPipe`** — `whitelist`, `forbidNonWhitelisted`, `transform`.
+11. [x] **Создать `AllExceptionsFilter`** — единый формат ошибок `{ statusCode, error, message, path, timestamp }`.
+12. [x] **Подключить `nestjs-pino`** — структурные логи, без паролей и токенов.
+13. [x] **Настроить CORS по whitelist** — `CORS_ORIGINS` из env, без `*`.
+14. [x] **Создать `HealthModule`** — `/api/health` (liveness) и `/api/health/ready` (проверка БД и Redis).
+15. [x] **Проверить запуск приложения** — `GET /api/health` возвращает 200, при отсутствии обязательной переменной приложение не стартует.
 
 ---
 
 ## Эпик 3. База данных и TypeORM (16–30)
 
-16. **Подключить TypeORM через `ConfigService`** — `forRootAsync`, `synchronize: false`.
-17. **Создать `data-source.ts` для CLI** — отдельный DataSource для миграций.
-18. **Настроить скрипты `migration:generate/run/revert/seed`** — в `package.json`.
-19. **Описать сущность `User`** — `id`, `email`, `password_hash`, `role`, `created_at`.
-20. **Описать сущность `Product`** — включая `images[]`, `stock_quantity`, `file_public_id`, `deleted_at`.
-21. **Описать сущности `Cart` и `CartItem`** — 1:1 с User, составной unique `(cart_id, product_id)`.
-22. **Описать сущность `PromoCode`** — `code` unique upper-case, `discount_percentage`, `is_active`.
-23. **Описать сущности `Order` и `OrderItem`** — enum статуса, snapshot цены и названия.
-24. **Добавить transformer `numeric → number`** — чтобы цена приходила числом, а не строкой.
-25. **Добавить `@DeleteDateColumn` для `Product`** — soft-delete.
-26. **Добавить индексы** — `products(price)`, `products(rating)`, `products(title)`.
-27. **Добавить unique-ограничения** — email, promo code, cart user.
-28. **Добавить `CHECK (stock_quantity >= 0)`** — защита от отрицательного остатка.
-29. **Сгенерировать первую миграцию** — `migration:generate`, проверить `run` и `revert`.
-30. **Написать seed** — админ, `SAVE10`, 15–20 демо-товаров с 3 превью каждый.
+16. [x] **Подключить TypeORM через `ConfigService`** — `forRootAsync`, `synchronize: false`.
+17. [x] **Создать `data-source.ts` для CLI** — отдельный DataSource для миграций.
+18. [x] **Настроить скрипты `migration:generate/run/revert/seed`** — в `package.json`.
+19. [x] **Описать сущность `User`** — `id`, `email`, `password_hash`, `role`, `created_at`.
+20. [x] **Описать сущность `Product`** — включая `images[]`, `stock_quantity`, `file_public_id`, `deleted_at`.
+21. [x] **Описать сущности `Cart` и `CartItem`** — 1:1 с User, составной unique `(cart_id, product_id)`.
+22. [x] **Описать сущность `PromoCode`** — `code` unique upper-case, `discount_percentage`, `is_active`.
+23. [x] **Описать сущности `Order` и `OrderItem`** — enum статуса, snapshot цены и названия.
+24. [x] **Добавить transformer `numeric → number`** — чтобы цена приходила числом, а не строкой.
+25. [x] **Добавить `@DeleteDateColumn` для `Product`** — soft-delete.
+26. [x] **Добавить индексы** — `products(price)`, `products(rating)`, `products(title)`.
+27. [x] **Добавить unique-ограничения** — email, promo code, cart user.
+28. [x] **Добавить `CHECK (stock_quantity >= 0)`** — защита от отрицательного остатка.
+29. [x] **Сгенерировать первую миграцию** — `migration:generate`, проверить `run` и `revert`.
+30. [x] **Написать seed** — админ, `SAVE10`, 15–20 демо-товаров с 3 превью каждый.
 
 ---
 

@@ -1,14 +1,45 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import helmet from 'helmet';
+import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module.js';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter.js';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+async function bootstrap(): Promise<void> {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
+  });
+
+  app.useLogger(app.get(Logger));
+  app.flushLogs();
+
+  const config = app.get(ConfigService);
+
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
+  app.set('trust proxy', 1);
+  app.use(helmet());
 
   app.setGlobalPrefix('api');
-  app.enableCors();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
+  app.useGlobalFilters(new AllExceptionsFilter());
 
-  const configService = app.get(ConfigService);
-  await app.listen(configService.get<number>('PORT', 3000));
+  app.enableCors({
+    origin: config.get<string[]>('app.corsOrigins', []),
+    credentials: true,
+  });
+
+  app.enableShutdownHooks();
+
+  await app.listen(config.get<number>('app.port', 3000), '0.0.0.0');
 }
-await bootstrap();
+
+void bootstrap();

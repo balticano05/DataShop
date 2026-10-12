@@ -1,0 +1,18 @@
+Это для централизованной загрузки и валидации переменных окружения (.env):
+- @nestjs/config — официальный модуль NestJS: читает .env, кладёт значения в process.env и даёт доступ к ним через сервис ConfigService (configService.get('DATABASE_URL')).
+- isGlobal: true — после этого ConfigModule доступен во всех модулях без повторного imports, не нужно импортировать его в каждый feature-модуль.
+- joi — библиотека валидации схем: через validationSchema в forRoot ты описываешь, какие env-переменные обязательны (PORT, DB_HOST и т.д.) и их типы. Если чего-то нет или тип неверный — приложение упадёт при старте с понятной ошибкой, а не позже где-нибудь в рантайме.
+Итого: один раз подключил в корневом AppModule — и везде конфиг типизирован, валидирован и не разбросан по process.env.
+
+Готово — эпик 2 закрыт (задачи 8–15).
+Добавлено
+- src/config/configuration.ts — типизированный конфиг (app/database/redis/jwt/cloudinary)
+- src/config/env.validation.ts — Joi-схема: DATABASE_URL, JWT_SECRET обязательны
+- src/config/logger.config.ts — pino + redact секретов/заголовков, pino-pretty в dev
+- src/common/filters/all-exceptions.filter.ts — единый формат ошибок, сохраняет native payload Terminus
+- src/health/ — HealthModule, HealthController, индикаторы БД (pg) и Redis (ioredis)
+Изменено: main.ts (helmet, x-powered-by off, /api, ValidationPipe, CORS whitelist, shutdown hooks, 0.0.0.0), app.module.ts (Config + Logger + Health). В .env ключ переименован CORS_ORIGIN → CORS_ORIGINS (как в SPEC).
+Проверено
+- nest build и oxlint — чисто
+- GET /api/health → 200; GET /api/health/ready → 503 с деталями (БД на Neon — up, Redis — down)
+- старт с невалидным DATABASE_URL падает с понятной ошибкой
