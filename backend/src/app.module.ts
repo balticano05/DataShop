@@ -5,6 +5,7 @@ import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module.js';
 import { CacheModule } from './cache/cache.module.js';
+import { CartModule } from './cart/cart.module.js';
 import configuration from './config/configuration.js';
 import { envValidationSchema } from './config/env.validation.js';
 import { loggerConfig } from './config/logger.config.js';
@@ -28,6 +29,7 @@ import { ProductsModule } from './products/products.module.js';
     HealthModule,
     AuthModule,
     ProductsModule,
+    CartModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
