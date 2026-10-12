@@ -11,6 +11,7 @@ import { envValidationSchema } from './config/env.validation.js';
 import { loggerConfig } from './config/logger.config.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthModule } from './health/health.module.js';
+import { OrdersModule } from './orders/orders.module.js';
 import { ProductsModule } from './products/products.module.js';
 
 @Module({
@@ -30,6 +31,7 @@ import { ProductsModule } from './products/products.module.js';
     AuthModule,
     ProductsModule,
     CartModule,
+    OrdersModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
