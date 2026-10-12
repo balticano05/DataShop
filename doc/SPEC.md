@@ -146,16 +146,16 @@
 
 ## Эпик 9. Медиа и защищённое скачивание (101–110)
 
-101. **Создать `MediaModule`** — провайдер Cloudinary.
-102. **Реализовать `POST /api/admin/media/preview`** — публичная загрузка превью.
-103. **Реализовать `POST /api/admin/media/dataset/:productId`** — загрузка файла базы.
-104. **Ограничить размер и MIME-тип загрузки** — через `FileInterceptor`.
-105. **Сохранять только `file_public_id`** — файл не отдаётся напрямую.
-106. **Создать `DownloadsModule` и `DownloadsService`** — проверка покупки.
-107. **Реализовать `GET /api/downloads/:productId`** — 403, если не куплено.
-108. **Генерировать signed URL на 60 секунд** — через Cloudinary SDK.
-109. **Логировать выдачу ссылок** — user, product, timestamp.
-110. **Проверить, что прямая ссылка не работает** — вручную открыть `file_public_id` → 401.
+101. [x] **Создать `MediaModule`** — провайдер Cloudinary.
+102. [x] **Реализовать `POST /api/admin/media/preview`** — публичная загрузка превью.
+103. [x] **Реализовать `POST /api/admin/media/dataset/:productId`** — загрузка файла базы.
+104. [x] **Ограничить размер и MIME-тип загрузки** — через `FileInterceptor`.
+105. [x] **Сохранять только `file_public_id`** — файл не отдаётся напрямую.
+106. [x] **Создать `DownloadsModule` и `DownloadsService`** — проверка покупки.
+107. [x] **Реализовать `GET /api/downloads/:productId`** — 403, если не куплено.
+108. [x] **Генерировать signed URL на 60 секунд** — через Cloudinary SDK.
+109. [x] **Логировать выдачу ссылок** — user, product, timestamp.
+110. [x] **Проверить, что прямая ссылка не работает** — вручную открыть `file_public_id` → 401.
 
 ---
 

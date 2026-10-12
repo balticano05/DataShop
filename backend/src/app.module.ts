@@ -10,7 +10,9 @@ import configuration from './config/configuration.js';
 import { envValidationSchema } from './config/env.validation.js';
 import { loggerConfig } from './config/logger.config.js';
 import { DatabaseModule } from './database/database.module.js';
+import { DownloadsModule } from './downloads/downloads.module.js';
 import { HealthModule } from './health/health.module.js';
+import { MediaModule } from './media/media.module.js';
 import { OrdersModule } from './orders/orders.module.js';
 import { ProductsModule } from './products/products.module.js';
 
@@ -32,6 +34,8 @@ import { ProductsModule } from './products/products.module.js';
     ProductsModule,
     CartModule,
     OrdersModule,
+    MediaModule,
+    DownloadsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
