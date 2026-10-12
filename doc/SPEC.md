@@ -71,26 +71,26 @@
 
 ## Эпик 5. Каталог товаров (46–65)
 
-46. **Создать `ProductsModule`** — controller, service, repository.
-47. **Создать `QueryProductsDto`** — все query-параметры с валидацией.
-48. **Ввести enum для `sort_by` и `order`** — whitelist значений.
-49. **Реализовать `GET /api/products`** — QueryBuilder с фильтрами.
-50. **Реализовать поиск `ILIKE` по title и description** — без учёта регистра.
-51. **Реализовать `escapeLike`** — экранирование `%`, `_`, `\`.
-52. **Реализовать фильтры `min_price`, `max_price`** — с проверкой `min <= max`.
-53. **Реализовать фильтр `min_rating`** — 0–5.
-54. **Реализовать сортировку** — `price`/`title` + `asc`/`desc` + `addOrderBy('id')` для стабильности.
-55. **Реализовать пагинацию** — `skip`/`take` + `getManyAndCount`.
-56. **Сформировать формат ответа `{ items, meta }`** — как в требованиях.
-57. **Реализовать `GET /api/products/:id`** — без приватных полей.
-58. **Создать response-маппер `ProductDto`** — исключить `file_public_id`.
-59. **Реализовать `POST /api/products`** — только admin.
-60. **Реализовать `PATCH /api/products/:id`** — только admin.
+46. [x] **Создать `ProductsModule`** — controller, service, repository.
+47. [x] **Создать `QueryProductsDto`** — все query-параметры с валидацией.
+48. [x] **Ввести enum для `sort_by` и `order`** — whitelist значений.
+49. [x] **Реализовать `GET /api/products`** — QueryBuilder с фильтрами.
+50. [x] **Реализовать поиск `ILIKE` по title и description** — без учёта регистра.
+51. [x] **Реализовать `escapeLike`** — экранирование `%`, `_`, `\`.
+52. [x] **Реализовать фильтры `min_price`, `max_price`** — с проверкой `min <= max`.
+53. [x] **Реализовать фильтр `min_rating`** — 0–5.
+54. [x] **Реализовать сортировку** — `price`/`title` + `asc`/`desc` + `addOrderBy('id')` для стабильности.
+55. [x] **Реализовать пагинацию** — `skip`/`take` + `getManyAndCount`.
+56. [x] **Сформировать формат ответа `{ items, meta }`** — как в требованиях.
+57. [x] **Реализовать `GET /api/products/:id`** — без приватных полей.
+58. [x] **Создать response-маппер `ProductDto`** — исключить `file_public_id`.
+59. [x] **Реализовать `POST /api/products`** — только admin.
+60. [x] **Реализовать `PATCH /api/products/:id`** — только admin.
 61. **Реализовать `DELETE /api/products/:id`** — soft-delete + инвалидация кэша.
-62. **Валидировать DTO товара** — минимум 3 изображения, цена > 0, stock ≥ 0.
-63. **Проверить, что удалённый товар не попадает в каталог** — `deleted_at IS NULL` автоматически.
-64. **Включить SQL-логи только в dev** — `logging: ['query']` под флагом.
-65. **Проверить `sort_by=hack` → 400** — защита от инъекций в сортировку.
+62. [x] **Валидировать DTO товара** — минимум 3 изображения, цена > 0, stock ≥ 0.
+63. [x] **Проверить, что удалённый товар не попадает в каталог** — `deleted_at IS NULL` автоматически.
+64. [x] **Включить SQL-логи только в dev** — `logging: ['query']` под флагом.
+65. [x] **Проверить `sort_by=hack` → 400** — защита от инъекций в сортировку.
 
 ---
 
