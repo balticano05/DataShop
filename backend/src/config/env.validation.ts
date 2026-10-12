@@ -19,7 +19,7 @@ export const envValidationSchema = Joi.object({
   REDIS_URL: Joi.string()
     .uri({ scheme: ['redis', 'rediss'] })
     .default('redis://localhost:6379'),
-  CACHE_TTL: Joi.number().integer().positive().default(120),
+  CACHE_TTL_SECONDS: Joi.number().integer().positive().default(90),
 
   CLOUDINARY_CLOUD_NAME: Joi.string().allow('').optional(),
   CLOUDINARY_API_KEY: Joi.string().allow('').optional(),

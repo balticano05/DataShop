@@ -86,7 +86,7 @@
 58. [x] **Создать response-маппер `ProductDto`** — исключить `file_public_id`.
 59. [x] **Реализовать `POST /api/products`** — только admin.
 60. [x] **Реализовать `PATCH /api/products/:id`** — только admin.
-61. **Реализовать `DELETE /api/products/:id`** — soft-delete + инвалидация кэша.
+61. [x] **Реализовать `DELETE /api/products/:id`** — soft-delete + инвалидация кэша.
 62. [x] **Валидировать DTO товара** — минимум 3 изображения, цена > 0, stock ≥ 0.
 63. [x] **Проверить, что удалённый товар не попадает в каталог** — `deleted_at IS NULL` автоматически.
 64. [x] **Включить SQL-логи только в dev** — `logging: ['query']` под флагом.
@@ -96,16 +96,16 @@
 
 ## Эпик 6. Кэширование каталога (66–75)
 
-66. **Создать `CacheModule` на `ioredis`** — провайдер подключения к Redis.
-67. **Реализовать `CatalogCacheService`** — методы `get`, `set`, `invalidateAll`.
-68. **Строить ключ `catalog:sha1(normalized query)`** — параметры отсортированы по имени.
-69. **Настроить TTL 90 секунд** — из `CACHE_TTL_SECONDS`.
-70. **Возвращать `X-Cache: HIT|MISS`** — через `CacheHeaderInterceptor`.
-71. **Инвалидировать кэш при `POST/PATCH/DELETE /products`** — `SCAN` + `UNLINK` по маске `catalog:*`.
+66. [x] **Создать `CacheModule` на `ioredis`** — провайдер подключения к Redis.
+67. [x] **Реализовать `CatalogCacheService`** — методы `get`, `set`, `invalidateAll`.
+68. [x] **Строить ключ `catalog:sha1(normalized query)`** — параметры отсортированы по имени.
+69. [x] **Настроить TTL 90 секунд** — из `CACHE_TTL_SECONDS`.
+70. [x] **Возвращать `X-Cache: HIT|MISS`** — через `CacheHeaderInterceptor`.
+71. [x] **Инвалидировать кэш при `POST/PATCH/DELETE /products`** — `SCAN` + `UNLINK` по маске `catalog:*`.
 72. **Инвалидировать кэш после checkout** — меняется остаток.
-73. **Обеспечить работу API без Redis** — try/catch, лог, продолжение работы.
-74. **Проверить HIT/MISS** — второй одинаковый запрос возвращает HIT.
-75. **Проверить инвалидацию** — после DELETE следующий запрос возвращает MISS.
+73. [x] **Обеспечить работу API без Redis** — try/catch, лог, продолжение работы.
+74. [x] **Проверить HIT/MISS** — второй одинаковый запрос возвращает HIT.
+75. [x] **Проверить инвалидацию** — после DELETE следующий запрос возвращает MISS.
 
 ---
 

@@ -10,9 +10,11 @@ import {
   Patch,
   Post,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Public } from '../auth/decorators/public.decorator.js';
 import { Roles } from '../auth/decorators/roles.decorator.js';
+import { CacheHeaderInterceptor } from '../cache/cache-header.interceptor.js';
 import { UserRole } from '../database/enums/user-role.enum.js';
 import { CreateProductDto } from './dto/create-product.dto.js';
 import { ProductResponseDto } from './dto/product-response.dto.js';
@@ -26,6 +28,7 @@ export class ProductsController {
 
   @Public()
   @Get()
+  @UseInterceptors(CacheHeaderInterceptor)
   findAll(@Query() query: QueryProductsDto): Promise<PaginatedProducts> {
     return this.productsService.findAll(query);
   }

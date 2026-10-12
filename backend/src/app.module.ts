@@ -4,6 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module.js';
+import { CacheModule } from './cache/cache.module.js';
 import configuration from './config/configuration.js';
 import { envValidationSchema } from './config/env.validation.js';
 import { loggerConfig } from './config/logger.config.js';
@@ -22,6 +23,7 @@ import { ProductsModule } from './products/products.module.js';
     }),
     LoggerModule.forRoot(loggerConfig),
     ThrottlerModule.forRoot([{ ttl: minutes(1), limit: 100 }]),
+    CacheModule,
     DatabaseModule,
     HealthModule,
     AuthModule,

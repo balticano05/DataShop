@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CatalogCacheService } from '../cache/catalog-cache.service.js';
 import { escapeLike } from '../common/utils/escape-like.js';
 import { Product } from '../database/entities/product.entity.js';
 import { CreateProductDto } from './dto/create-product.dto.js';
@@ -37,6 +38,7 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>,
+    private readonly catalogCache: CatalogCacheService,
   ) {}
 
   async findAll(query: QueryProductsDto): Promise<PaginatedProducts> {
@@ -119,6 +121,7 @@ export class ProductsService {
       filePublicId: dto.filePublicId ?? null,
     });
     const saved = await this.productsRepository.save(product);
+    await this.catalogCache.invalidateAll();
     return ProductResponseDto.from(saved);
   }
 
@@ -137,6 +140,7 @@ export class ProductsService {
     if (dto.filePublicId !== undefined) product.filePublicId = dto.filePublicId;
 
     const saved = await this.productsRepository.save(product);
+    await this.catalogCache.invalidateAll();
     return ProductResponseDto.from(saved);
   }
 
@@ -146,5 +150,6 @@ export class ProductsService {
       throw new NotFoundException('Product not found');
     }
     await this.productsRepository.softRemove(product);
+    await this.catalogCache.invalidateAll();
   }
 }

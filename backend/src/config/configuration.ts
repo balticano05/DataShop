@@ -46,7 +46,7 @@ export default (): RootConfig => ({
   },
   redis: {
     url: process.env.REDIS_URL as string,
-    ttl: Number.parseInt(process.env.CACHE_TTL ?? '120', 10),
+    ttl: Number.parseInt(process.env.CACHE_TTL_SECONDS ?? '90', 10),
   },
   jwt: {
     secret: process.env.JWT_SECRET as string,
