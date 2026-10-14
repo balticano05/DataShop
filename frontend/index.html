@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DataShop — маркетплейс датасетов</title>
+<style>
+/* ============================ TOKENS ============================ */
+:root{
+  /* brand */
+  --color-primary:#f54900; --color-primary-hover:#ca3500; --color-primary-ghost:#f5490014;
+  /* text */
+  --color-text-main:#101828; --color-text-header:#364153; --color-text-secondary:#4a5565;
+  --color-text-white:#fff; --color-text-white-muted:#d1d5dc;
+  /* bg */
+  --color-bg:#fff; --color-bg-muted:#f6f6f6; --color-footer-bg:#101828;
+  /* separator */
+  --footer-separator:rgb(255 255 255 / 10%);
+  /* states */
+  --color-danger:#e7000b; --color-danger-bg:#fff1f2; --color-star:#fdc700;
+  /* border */
+  --color-border:#d1d5dc; --color-placeholder:#0a0a0a80;
+  /* icon */
+  --color-icon:#4a5565;
+  /* type */
+  --font-family-base:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-size-xs:12px; --font-size-sm:14px; --font-size-md:16px; --font-size-lg:24px; --font-size-xl:40px;
+  /* radius / layout */
+  --radius-sm:6px; --radius-md:8px; --radius-lg:12px;
+  --container-width:1320px; --top-margin:32px;
+  /* input */
+  --input-border:var(--color-border); --input-placeholder:#9ca3af;
+  /* shadow */
+  --shadow-sm:0 1px 2px rgb(0 0 0 / 5%); --shadow-md:0 4px 10px rgb(0 0 0 / 8%); --shadow-lg:0 10px 25px rgb(0 0 0 / 12%);
+  --transition-fast:.15s ease; --transition-base:.25s ease;
+}
+
+/* ============================ RESET ============================ */
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0;padding:0}
+html{line-height:1.5;font-size:var(--font-size-md);-webkit-text-size-adjust:100%}
+body{min-height:100vh;font-family:var(--font-family-base);background:var(--color-bg);color:var(--color-text-main)}
+img,svg{display:block;max-width:100%}
+ul,ol{list-style:none}
+a{text-decoration:none;color:inherit;transition:color var(--transition-fast)}
+a:hover{color:var(--color-primary)}
+button,input,textarea,select{font:inherit;border:none;background:none;color:inherit}
+button{cursor:pointer}
+table{border-collapse:collapse}
+::selection{background:var(--color-primary);color:#fff}
+
+/* ============================ PRIMITIVES ============================ */
+.container{max-width:var(--container-width);margin:0 auto;padding:0 20px;width:100%}
+h1,h2,h3,h4{font-weight:700;color:var(--color-text-main)}
+p{color:var(--color-text-secondary)}
+#app-main{flex:1}
+.page{padding:var(--top-margin) 0 48px}
+
+/* BUTTON */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:var(--radius-lg);
+  font-weight:500;line-height:1.2;white-space:nowrap;user-select:none;transition:background var(--transition-fast),border-color var(--transition-fast),color var(--transition-fast)}
+.btn--xs{height:24px;padding:0 8px;font-size:var(--font-size-xs)}
+.btn--sm{height:32px;padding:0 12px;font-size:var(--font-size-xs)}
+.btn--md{height:40px;padding:0 16px;font-size:var(--font-size-sm)}
+.btn--lg{height:48px;padding:0 24px;font-size:var(--font-size-md)}
+.btn--xl{height:52px;padding:0 28px;font-size:var(--font-size-md);border-width:2px}
+.btn--primary{background:var(--color-primary);color:#fff}
+.btn--primary:hover{background:var(--color-primary-hover);color:#fff}
+.btn--primary-outline{background:transparent;border-color:var(--color-primary);color:var(--color-primary)}
+.btn--primary-outline:hover{background:var(--color-primary-ghost);color:var(--color-primary)}
+.btn--secondary-outline{background:transparent;border-color:var(--color-border);color:var(--color-text-main)}
+.btn--secondary-outline:hover{background:var(--color-bg-muted)}
+.btn--ghost{background:transparent}
+.btn--ghost:hover{background:var(--color-bg-muted)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn .ic{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btn--lg .ic,.btn--xl .ic{width:20px;height:20px}
+.btn .ic svg{width:100%;height:100%}
+
+/* INPUT */
+.input{display:flex;align-items:center;gap:8px;height:42px;padding:0 10px;border:1px solid var(--input-border);border-radius:var(--radius-md);background:#fff;transition:border-color var(--transition-fast)}
+.input:focus-within{border:2px solid var(--color-primary);padding:0 9px}
+.input svg{color:var(--input-placeholder);flex-shrink:0}
+.input input{width:100%;outline:none;background:transparent;font-size:var(--font-size-md);color:var(--color-text-main)}
+.input input::placeholder{color:var(--input-placeholder)}
+.input--dark{background:#1e2939;border-color:#364153}
+.input--dark input{color:#fff}
+.input--dark input::placeholder{color:#9ca3af}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:var(--font-size-sm);color:var(--color-text-secondary);margin-bottom:6px}
+
+/* CARDS / PANEL */
+.card{background:var(--color-bg);border:1px solid var(--color-border);border-radius:var(--radius-lg)}
+
+/* ============================ HEADER ============================ */
+.header{width:100%;border-bottom:1px solid var(--color-border);background:var(--color-bg);position:sticky;top:0;z-index:100}
+.header .bar{display:flex;align-items:center;justify-content:space-between;height:80px;gap:32px}
+.logo{display:flex;align-items:center;gap:8px}
+.logo svg{width:46px;height:46px}
+.logo b{font-size:var(--font-size-lg);font-weight:700;color:var(--color-text-main)}
+.nav{display:flex;gap:30px}
+.nav a{color:var(--color-text-secondary);font-weight:400}
+.nav a.active{color:var(--color-primary)}
+.header-search{flex:1;max-width:460px}
+.actions{display:flex;align-items:center;gap:16px}
+.icon-link{position:relative;display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;color:var(--color-text-secondary)}
+.icon-link:hover{color:var(--color-primary)}
+.icon-link .badge{position:absolute;top:-8px;right:-8px;min-width:18px;height:18px;padding:0 4px;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--color-primary);color:#fff;font-size:var(--font-size-xs);font-weight:600;border-radius:999px}
+.who{color:var(--color-text-secondary);font-size:var(--font-size-sm);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ============================ HEADING ============================ */
+.heading{margin-bottom:24px}
+.heading h1{font-size:var(--font-size-xl);margin-bottom:8px}
+.heading p{font-size:var(--font-size-md)}
+.heading--center{text-align:center}
+
+/* ============================ PRODUCTS PANEL ============================ */
+.panel{margin:20px 0}
+.controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;color:var(--color-text-secondary)}
+.controls .left{display:flex;align-items:center;gap:12px}
+.sort{display:flex;align-items:center;gap:8px}
+
+/* custom select */
+.select{position:relative;display:inline-block;min-width:190px}
+.select>button{width:100%;justify-content:space-between;gap:8px}
+.select .chev{display:flex;transition:transform .2s ease;opacity:.7}
+.select.open .chev{transform:rotate(180deg)}
+.select .menu{position:absolute;top:calc(100% + 2px);left:0;width:100%;background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-md);
+  box-shadow:var(--shadow-md);overflow:hidden;z-index:100}
+.select .opt{padding:10px 12px;cursor:pointer;transition:background var(--transition-fast);color:var(--color-text-main)}
+.select .opt:hover{background:var(--color-bg-muted)}
+
+/* filters */
+.filters{margin-top:16px;padding:20px;border:1px solid var(--color-border);border-radius:var(--radius-lg);background:#fff;display:flex;flex-direction:column;gap:20px}
+.filters .grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.filters .section{display:flex;flex-direction:column;gap:8px}
+.filters .section>span{font-size:var(--font-size-sm);font-weight:600}
+.filters .actions{display:flex;justify-content:flex-end;gap:8px}
+/* range */
+.range-wrap{position:relative;height:22px;margin:8px 0 2px}
+.range-track{position:absolute;top:9px;left:0;right:0;height:4px;background:#ccc;border-radius:999px}
+.range-fill{position:absolute;top:9px;height:4px;background:var(--color-primary);border-radius:999px}
+.range-wrap input[type=range]{position:absolute;top:0;left:0;width:100%;height:22px;margin:0;background:none;pointer-events:none;-webkit-appearance:none;appearance:none}
+.range-wrap input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid var(--color-primary);cursor:pointer}
+.range-wrap input[type=range]::-moz-range-thumb{pointer-events:auto;width:18px;height:18px;border-radius:50%;background:#fff;border:2px solid var(--color-primary);cursor:pointer}
+.range-labels{display:flex;justify-content:space-between;font-size:var(--font-size-xs);color:var(--color-text-secondary)}
+
+/* ============================ PRODUCT GRID ============================ */
+.grid-products{display:grid;width:100%;gap:24px;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.product-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden;transition:var(--transition-base);cursor:pointer}
+.product-card:hover{box-shadow:var(--shadow-md)}
+.product-card:hover .image img{transform:scale(1.1)}
+.product-card:hover .title{color:var(--color-primary)}
+.image{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:var(--color-bg-muted)}
+.image img{width:100%;height:100%;object-fit:cover;transition:var(--transition-base)}
+.product-card .content{padding:16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.product-card .title{font-size:var(--font-size-md);font-weight:600;transition:var(--transition-fast)}
+.rating{display:flex;align-items:center;gap:6px;font-size:var(--font-size-sm);color:var(--color-text-secondary)}
+.stars{position:relative;display:inline-block;white-space:nowrap;letter-spacing:1px;color:#d1d5dc}
+.stars .fill{position:absolute;top:0;left:0;overflow:hidden;color:var(--color-star);white-space:nowrap}
+.price-row{display:flex;align-items:center;gap:8px}
+.price{font-size:var(--font-size-lg);font-weight:700;color:var(--color-text-main)}
+.old-price{font-size:var(--font-size-sm);color:var(--color-placeholder);text-decoration:line-through}
+.category{font-size:var(--font-size-sm);color:var(--color-text-secondary)}
+.stock-pill{font-size:var(--font-size-xs);padding:3px 10px;border-radius:999px;background:var(--color-bg-muted);color:var(--color-text-secondary)}
+/* counter (in card) */
+.counter{border-radius:var(--radius-lg);background:var(--color-primary-ghost);display:inline-flex;align-items:center;gap:8px;justify-content:space-between;padding:2px;min-width:130px;max-height:40px;margin-top:auto}
+.counter button{width:34px;height:34px;border-radius:var(--radius-md);color:var(--color-primary);display:flex;align-items:center;justify-content:center}
+.counter button:hover{background:#fff}
+.counter .amount{min-width:24px;text-align:center;color:var(--color-primary);font-weight:500}
+.card-add{margin-top:auto}
+
+/* pagination */
+.pager{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:28px;color:var(--color-text-secondary)}
+.pager button{width:40px;height:40px;border:1px solid var(--color-border);border-radius:var(--radius-md);background:#fff;display:inline-flex;align-items:center;justify-content:center}
+.pager button:hover:not(:disabled){border-color:var(--color-primary);color:var(--color-primary)}
+.pager button:disabled{opacity:.4;cursor:not-allowed}
+
+/* ============================ PRODUCT PAGE ============================ */
+.breadcrumbs{display:flex;gap:8px;font-size:var(--font-size-sm);color:var(--color-text-secondary);margin-bottom:24px}
+.product-layout{display:grid;gap:60px;grid-template-columns:1fr}
+.gallery .main{position:relative;aspect-ratio:1/1;background:var(--color-bg-muted);border-radius:var(--radius-md);overflow:hidden}
+.gallery .main img{width:100%;height:100%;object-fit:cover}
+.gallery .arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid var(--color-border);border-radius:50%;z-index:5}
+.gallery .arrow:hover{background:var(--color-bg-muted)}
+.gallery .arrow.left{left:12px}
+.gallery .arrow.right{right:12px}
+.gallery .thumbs{display:flex;gap:12px;margin-top:12px;overflow-x:auto;scrollbar-width:none}
+.gallery .thumbs::-webkit-scrollbar{display:none}
+.gallery .thumb{flex:0 0 calc((100% - 24px)/3);aspect-ratio:1/1;border:2px solid var(--color-border);border-radius:var(--radius-md);overflow:hidden}
+.gallery .thumb.active{border-color:var(--color-primary)}
+.gallery .thumb img{width:100%;height:100%;object-fit:cover}
+.pinfo{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pinfo h1{font-size:var(--font-size-xl)}
+.pinfo .price{display:flex;align-items:baseline;gap:8px;font-size:var(--font-size-xl);font-weight:700}
+.pinfo .unit{font-size:var(--font-size-sm);font-weight:400;color:var(--color-text-secondary)}
+.pinfo .quantity{padding-top:16px;border-top:1px solid var(--color-border);display:flex;flex-direction:column;gap:8px}
+.pinfo .quantity h2{font-size:var(--font-size-md)}
+.qty-controls{display:flex;gap:8px}
+.qty-controls input{width:74px;text-align:center;border:1px solid var(--color-border);border-radius:var(--radius-md);height:48px}
+.attr-row{display:flex;flex-direction:row;gap:32px;flex-wrap:wrap}
+.attr{display:flex;align-items:flex-start;gap:12px;flex:1 1 160px}
+.attr .ic{width:20px;height:20px;color:var(--color-primary);flex-shrink:0;margin-top:2px}
+.attr .t{font-size:var(--font-size-sm);font-weight:600}
+.attr .d{font-size:var(--font-size-xs);color:var(--color-text-secondary)}
+.action-btns{display:flex;flex-direction:column;gap:10px}
+.add-cart-big{position:relative}
+.add-cart-big .cbadge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:rgb(255 255 255 / 20%);font-size:var(--font-size-xs);font-weight:600}
+.description{display:flex;flex-direction:column;gap:8px}
+.description h2{font-size:var(--font-size-md)}
+.description p{line-height:1.6}
+/* collapse */
+.collapse{border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden}
+.collapse .trigger{width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 24px;background:#fff}
+.collapse .trigger .tt{font-size:var(--font-size-md);font-weight:700}
+.collapse .chev{display:flex;transition:transform var(--transition-base)}
+.collapse.open .chev{transform:rotate(180deg)}
+.collapse .content{max-height:0;overflow:hidden;transition:max-height var(--transition-base)}
+.collapse.open .content{max-height:900px}
+.collapse .inner{padding:16px}
+.specs{display:grid;grid-template-columns:1fr;gap:16px;padding:24px;border-radius:var(--radius-md);background:var(--color-bg-muted)}
+.specs .item{display:flex;flex-direction:column;gap:4px;padding:14px 0;border-bottom:1px solid var(--color-border)}
+.specs .item:last-child{border-bottom:none}
+.specs .k{font-size:var(--font-size-sm);text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-secondary)}
+.specs .v{font-size:var(--font-size-md);font-weight:600}
+.related{padding-top:64px}
+.related h2{margin-bottom:16px}
+.carousel{display:flex;gap:24px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+.carousel::-webkit-scrollbar{display:none}
+.carousel .product-card{flex:0 0 300px}
+
+/* ============================ CART ============================ */
+.page-title{font-size:32px;font-weight:700;margin-bottom:32px}
+.cart-grid{display:grid;grid-template-columns:2fr 1fr;gap:32px}
+.cart-left{display:flex;flex-direction:column;gap:24px}
+.cart-right{display:flex;flex-direction:column;gap:24px}
+.cart-box{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden}
+.cart-head{display:grid;grid-template-columns:6fr 2fr 2fr 2fr;padding:24px;font-size:var(--font-size-sm);font-weight:600;color:var(--color-text-secondary);border-bottom:1px solid var(--color-border)}
+.cart-head .c{text-align:center}
+.cart-head .r{text-align:right}
+.cart-item{display:grid;grid-template-columns:6fr 2fr 2fr 2fr;padding:24px;align-items:center;border-bottom:1px solid var(--color-border)}
+.cart-item:last-child{border-bottom:none}
+.cart-prod{display:flex;gap:16px}
+.cart-prod img{width:100px;height:100px;object-fit:cover;border-radius:var(--radius-md);background:var(--color-bg-muted)}
+.cart-prod .name{font-weight:600}
+.cart-prod .cat{font-size:13px;color:var(--color-text-secondary)}
+.cart-price{text-align:center;font-weight:700}
+.cart-qty{display:flex;align-items:center;justify-content:center;gap:8px}
+.cart-qty button{width:28px;height:28px;border:1px solid var(--color-border);border-radius:var(--radius-sm);background:#fff}
+.cart-qty button:hover{border-color:var(--color-primary);color:var(--color-primary)}
+.cart-total{display:flex;justify-content:flex-end;align-items:center;gap:12px;font-weight:700}
+.cart-total .trash{color:var(--color-danger);width:16px;height:16px}
+.cart-total .trash:hover{opacity:.7}
+.promo{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:24px}
+.promo h3{margin-bottom:12px}
+.promo .row{display:flex;gap:12px}
+.promo .ok{padding:6px 2px 0;color:var(--color-primary);font-size:var(--font-size-sm)}
+.summary{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:24px;position:sticky;top:24px}
+.summary h2{font-size:var(--font-size-lg);margin-bottom:16px;text-align:left}
+.summary .lines{display:flex;flex-direction:column;gap:16px;margin:0 0 16px}
+.summary .lines>div{display:flex;justify-content:space-between;color:var(--color-text-secondary)}
+.summary .acc{color:var(--color-primary)}
+.summary .total{padding-top:24px;border-top:1px solid var(--color-border);display:flex;justify-content:space-between;font-size:var(--font-size-lg);font-weight:700;margin-bottom:16px}
+.summary .controls{display:flex;flex-direction:column;gap:8px}
+.shipping{background:#fff;border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:24px}
+.shipping h3{margin-bottom:16px}
+.shipping .it{display:flex;gap:12px;margin-bottom:16px}
+.shipping .it .ic{width:20px;height:20px;color:var(--color-primary);flex-shrink:0}
+.shipping .label{font-weight:600;color:var(--color-text-main)}
+.shipping .value{color:var(--color-text-secondary);font-size:var(--font-size-sm)}
+
+/* ============================ ORDERS ============================ */
+.order{margin-bottom:18px}
+.order .oh{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:20px 24px;border-bottom:1px solid var(--color-border)}
+.order .badge{font-size:var(--font-size-xs);padding:3px 10px;border-radius:999px;background:#e7f7ee;color:#0f7a46;font-weight:600}
+.order .oitem{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid var(--color-border)}
+.order .oitem:last-child{border-bottom:none}
+.order .oi-name{font-weight:600}
+.order .oi-sub{font-size:13px;color:var(--color-text-secondary)}
+.order .grow{flex:1;min-width:0}
+
+/* ============================ ABOUT ============================ */
+.about-hero{margin-bottom:40px}
+.about-section{margin-bottom:40px}
+.about-section h2{font-size:var(--font-size-lg);margin-bottom:16px}
+.about-block p{margin-bottom:12px;line-height:1.7}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.value{padding:28px;border:1px solid var(--color-border);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.value .emoji{font-size:32px}
+.value h3{margin:12px 0 8px}
+
+/* ============================ AUTH ============================ */
+.auth{max-width:400px;margin:20px auto;padding:28px}
+.auth .tabs{display:flex;gap:8px;margin-bottom:20px}
+.auth form{margin-top:4px}
+
+/* ============================ ADMIN ============================ */
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.admin-grid .card{padding:24px}
+.file{display:flex;gap:10px;align-items:center}
+.file input{flex:1;border:1px solid var(--color-border);border-radius:var(--radius-md);padding:8px}
+
+/* ============================ INFO / EMPTY ============================ */
+.info{display:flex;justify-content:center;align-items:center;padding:60px 0;text-align:center}
+.info .box{max-width:440px;display:flex;flex-direction:column;gap:6px}
+.info h1{font-size:var(--font-size-lg)}
+.info .act{margin-top:12px;display:flex;gap:10px;justify-content:center}
+
+/* ============================ FOOTER ============================ */
+.footer{background:var(--color-footer-bg);color:var(--color-text-white-muted);padding:60px 0;margin-top:auto}
+.footer .top{display:flex;flex-wrap:wrap;gap:32px;padding-bottom:32px;border-bottom:1px solid var(--footer-separator)}
+.footer .col{flex:1 1 220px;min-width:220px}
+.footer .col h4,.footer .col .brand{color:var(--color-text-white);font-weight:700;font-size:var(--font-size-lg);margin-bottom:16px}
+.footer .col a{display:block;margin-bottom:8px;color:var(--color-text-white-muted)}
+.footer .col a:hover{color:var(--color-primary)}
+.footer .col p{margin-bottom:8px;color:var(--color-text-white-muted)}
+.footer .desc{font-size:var(--font-size-sm)}
+.socials{display:flex;gap:8px;margin-top:8px}
+.socials a{display:inline-flex}
+.newsletter{display:flex;gap:8px}
+.footer .bottom{display:flex;flex-direction:column;gap:32px;margin-top:32px}
+.contacts{display:flex;flex-wrap:wrap;gap:32px;padding-bottom:32px;border-bottom:1px solid var(--footer-separator)}
+.contacts .cc{flex:1 1 180px;min-width:150px}
+.contacts .ct{font-weight:700;color:var(--color-text-white);margin-bottom:4px}
+.copyright{text-align:center;font-size:var(--font-size-sm);color:var(--color-text-white-muted)}
+
+/* ============================ TOAST ============================ */
+.toasts{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:10px;z-index:2000}
+.toast{background:var(--color-text-main);color:#fff;padding:12px 16px;border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);max-width:340px;font-size:var(--font-size-sm);animation:pop .2s ease}
+.toast.err{background:var(--color-danger)}
+.toast.ok{background:#0f7a46}
+@keyframes pop{from{transform:translateY(8px);opacity:0}}
+.spinner{width:36px;height:36px;border:3px solid var(--color-border);border-top-color:var(--color-primary);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============================ RESPONSIVE ============================ */
+@media (max-width:1280px){}
+@media (max-width:1024px){
+  .grid-products{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cart-grid{grid-template-columns:1fr}
+  .summary{position:static}
+  .values{grid-template-columns:1fr}
+  .admin-grid{grid-template-columns:1fr}
+  .nav{display:none}
+}
+@media (min-width:768px){
+  .product-layout{grid-template-columns:1fr 1fr;align-items:start}
+  .specs{grid-template-columns:1fr 1fr;gap:32px}
+}
+@media (min-width:1024px){
+  .product-layout{grid-template-columns:520px 1fr}
+}
+@media (max-width:768px){
+  .header-search{display:none}
+  .filters .grid{grid-template-columns:1fr}
+  .cart-head{display:none}
+  .cart-item{grid-template-columns:1fr;gap:12px;padding:16px}
+  .cart-price,.cart-qty{justify-content:space-between;text-align:left}
+  .cart-total{justify-content:space-between}
+  .heading h1{font-size:30px}
+}
+@media (max-width:640px){
+  .grid-products{grid-template-columns:1fr;gap:16px}
+}
+</style>
+</head>
+<body>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+  <header class="header">
+    <div class="container bar">
+      <a class="logo" href="#/">
+        <svg viewBox="0 0 500 500" aria-hidden="true"><rect x="50" y="50" width="400" height="400" rx="90" fill="#F54900"/><text x="250" y="330" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-weight="bold" font-size="210" fill="#fff">DS</text></svg>
+        <b>DataShop</b>
+      </a>
+      <nav class="nav" id="nav"></nav>
+      <div class="header-search">
+        <div class="input" id="searchBox">
+          <span data-ic="search"></span>
+          <input id="searchInput" placeholder="Поиск датасетов..." />
+        </div>
+      </div>
+      <div class="actions" id="actions"></div>
+    </div>
+  </header>
+
+  <main id="app-main"><div class="container" id="view"></div></main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="top">
+        <div class="col">
+          <div class="brand">DataShop</div>
+          <p class="desc">Маркетплейс наборов данных: покупайте и скачивайте датасеты для аналитики, ML и исследований.</p>
+          <div class="socials">
+            <a href="#" aria-label="Facebook" data-ic="facebook"></a>
+            <a href="#" aria-label="Twitter" data-ic="twitter"></a>
+            <a href="#" aria-label="Instagram" data-ic="instagram"></a>
+            <a href="#" aria-label="LinkedIn" data-ic="linkedin"></a>
+          </div>
+        </div>
+        <div class="col">
+          <h4>Разделы</h4>
+          <a href="#/">Каталог</a>
+          <a href="#/orders">Мои покупки</a>
+          <a href="#/cart">Корзина</a>
+          <a href="#/about">О проекте</a>
+        </div>
+        <div class="col">
+          <h4>Помощь</h4>
+          <a href="http://localhost:3000/api/docs" target="_blank" rel="noopener">API / Swagger</a>
+          <a href="#/about">Лицензии</a>
+          <a href="#/about">Доставка данных</a>
+          <a href="#/about">Политика конфиденциальности</a>
+        </div>
+        <div class="col">
+          <h4>Рассылка</h4>
+          <p>Подпишитесь на обновления каталога и акции.</p>
+          <div class="newsletter">
+            <div class="input input--dark"><input id="nlEmail" placeholder="Ваш email" /></div>
+            <button class="btn btn--primary" data-action="newsletter" aria-label="Подписаться" data-ic-btn="mail"></button>
+          </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="contacts">
+          <div class="cc"><p class="ct">Телефон</p><p>+7 (800) 000-00-00</p></div>
+          <div class="cc"><p class="ct">Email</p><p>support@datashop.local</p></div>
+          <div class="cc"><p class="ct">Адрес</p><p>г. Москва, ул. Данных, 1</p></div>
+        </div>
+        <p class="copyright">© 2026 DataShop. Все права защищены.</p>
+      </div>
+    </div>
+  </footer>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ============================ CONFIG ============================ */
+  const API = (location.protocol === "http:" && location.port === "3000")
+    ? "" : "http://localhost:3000";
+
+  /* ============================ ICONS ============================ */
+  const svg = (d, extra) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ${extra || ""}>${d}</svg>`;
+  const I = {
+    search: svg('<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>', 'width="20" height="20"'),
+    cart: svg('<path d="M5 7h13.79a2 2 0 0 1 1.99 2.2l-.6 6A2 2 0 0 1 18.19 17H8.64a2 2 0 0 1-1.96-1.61z"/><path d="m5 7-.81-3.24A1 1 0 0 0 3.22 3H2m6 18h2m6 0h2"/>', 'width="24" height="24"'),
+    plus: svg('<path d="M6 12h6m0 0h6m-6 0v6m0-6V6"/>', 'width="18" height="18"'),
+    minus: svg('<path d="M19 13H5v-2h14z" fill="currentColor" stroke="none"/>', 'width="18" height="18"'),
+    trash: svg('<path d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.43 22H7.57a2 2 0 0 1-1.99-1.78zm3.35-2.85A2 2 0 0 1 9.15 2h5.7a2 2 0 0 1 1.81 1.15L18 6H6zM2 6h20m-12 5v5m4-5v5"/>', 'width="16" height="16"'),
+    filter: svg('<path d="M3 5h4m14 0H11m-8 7h12m6 0h-2M3 19h2m16 0H9"/><circle cx="9" cy="5" r="2"/><circle cx="17" cy="12" r="2"/><circle cx="7" cy="19" r="2"/>', 'width="20" height="20"'),
+    chevronDown: svg('<path d="m6 10 6 6 6-6"/>', 'width="18" height="18"'),
+    chevronLeft: svg('<path d="m15 4-8 8 8 8"/>', 'width="22" height="22"'),
+    chevronRight: svg('<path d="m8 4 8 8-8 8"/>', 'width="22" height="22"'),
+    arrow: svg('<path d="M4 12h16m-7-7 7 7-7 7"/>', 'width="18" height="18"'),
+    mail: svg('<g><path d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"/><path d="m2 8 7.5 6a4 4 0 0 0 5 0L22 8"/></g>', 'width="18" height="18"'),
+    truck: svg('<path d="M16 6.25v9.51c-.12.15-.22.31-.29.49H8.29a2.5 2.5 0 0 0-4.58 0H3a1 1 0 0 1-1-1v-9a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2m6 7.11v2.89h-1.71a2.49 2.49 0 0 0-4.29-.49V7.25h2.43a1 1 0 0 1 .86.49l.91 1.51 1.23 2.05a4 4 0 0 1 .57 2.06"/><path d="M8.5 17.25a2.5 2.5 0 1 1-4.79-1 2.5 2.5 0 0 1 4.79 1m12 0a2.5 2.5 0 1 1-4.79-1c.07-.18.17-.34.29-.49a2.49 2.49 0 0 1 4.29.49c.14.32.21.66.21 1m-9.5-6H6m5-3H6"/>', 'width="20" height="20"'),
+    shield: svg('<path d="m13.15 21.2 1.67-1.17a13.39 13.39 0 0 0 5.45-13.62.84.84 0 0 0-.46-.59L12 2 4.19 5.82a.84.84 0 0 0-.45.59 13.39 13.39 0 0 0 5.45 13.62l1.67 1.17a2 2 0 0 0 2.29 0"/>', 'width="20" height="20"'),
+    box: svg('<path d="M11.03 2.54a2 2 0 0 1 1.94 0l7.52 4.17a1 1 0 0 1 .51.87v8.24a2 2 0 0 1-1.03 1.75l-7 3.89a2 2 0 0 1-1.94 0l-7-3.89A2 2 0 0 1 3 15.82V7.59a1 1 0 0 1 .51-.87z"/><path d="m3 7 9 5m0 0 9-5m-9 5v9.5"/><path d="m7.5 9.5 9-5M6 12.33 9 14"/>', 'width="20" height="20"'),
+    location: svg('<circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 1.89.4 3.13 1.5 4.5L12 22l6.5-7.5c1.1-1.37 1.5-2.61 1.5-4.5a8 8 0 0 0-8-8"/>', 'width="20" height="20"'),
+    calendar: svg('<rect x="2" y="4" width="20" height="18" rx="4"/><path d="M8 2v4m8-4v4M2 10h20"/>', 'width="20" height="20"'),
+    check: svg('<path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm-2 14.41-3.71-3.7 1.41-1.42L10 13.6l5.29-5.3 1.42 1.42z" fill="currentColor" stroke="none"/>', 'width="20" height="20"'),
+    facebook: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.77-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.45 2.89h-2.33v6.99A10 10 0 0 0 22 12"/></svg>',
+    twitter: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M22 5.9a8.2 8.2 0 0 1-2.36.65 4.1 4.1 0 0 0 1.8-2.27 8.2 8.2 0 0 1-2.6 1 4.1 4.1 0 0 0-7 3.74A11.65 11.65 0 0 1 3.4 4.75a4.1 4.1 0 0 0 1.27 5.47 4.07 4.07 0 0 1-1.86-.51v.05a4.1 4.1 0 0 0 3.29 4.02 4.1 4.1 0 0 1-1.85.07 4.1 4.1 0 0 0 3.83 2.85A8.23 8.23 0 0 1 2 18.4a11.62 11.62 0 0 0 6.29 1.84c7.55 0 11.68-6.25 11.68-11.67v-.53A8.35 8.35 0 0 0 22 5.9"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16m0 3.68A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84m0 10.16A4 4 0 1 1 16 12a4 4 0 0 1-4 4m6.4-10.4a1.44 1.44 0 1 1-1.44-1.44 1.44 1.44 0 0 1 1.44 1.44"/></svg>',
+    linkedin: '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13M7.12 20.45H3.55V9h3.57zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0"/></svg>'
+  };
+  const applyIcons = (root) => root.querySelectorAll("[data-ic]").forEach((el) => { el.innerHTML = I[el.dataset.ic] || ""; });
+  const setIconBtn = (root) => root.querySelectorAll("[data-ic-btn]").forEach((el) => {
+    const s = document.createElement("span"); s.className = "ic"; s.innerHTML = I[el.dataset.icBtn] || ""; el.prepend(s);
+  });
+
+  /* ============================ HELPERS ============================ */
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const money = (n) => Number(n).toLocaleString("ru-RU") + " ₽";
+  const setView = (html) => { $("#view").innerHTML = html; applyIcons($("#view")); window.scrollTo({ top: 0 }); };
+
+  function toast(msg, kind) {
+    const el = document.createElement("div");
+    el.className = "toast " + (kind || "");
+    el.textContent = msg;
+    $("#toasts").appendChild(el);
+    setTimeout(() => el.remove(), 3400);
+  }
+  const fail = (e) => toast((e && e.message) || "Что-то пошло не так", "err");
+
+  /* rating: base ★★★★★ grey + overlay fill in gold */
+  function stars(value, size) {
+    const pct = Math.max(0, Math.min(5, value)) / 5 * 100;
+    const s = size ? `font-size:${size}px;` : "";
+    return `<span class="stars" style="${s}"><span class="base">★★★★★</span><span class="fill" style="width:${pct}%">★★★★★</span></span>`;
+  }
+
+  /* ============================ STATE ============================ */
+  const state = {
+    token: sessionStorage.getItem("token") || "",
+    user: JSON.parse(sessionStorage.getItem("user") || "null"),
+    products: [], meta: { page: 1, totalPages: 1, total: 0, limit: 12 },
+    q: { search: "", sort_by: "created_at", order: "desc", page: 1, limit: 12, min_price: "", max_price: "", min_rating: "" },
+    filtersOpen: false,
+    product: null, picked: 0,
+    cart: null, orders: []
+  };
+  const isAdmin = () => state.user && state.user.role === "admin";
+  const cartQty = (id) => {
+    if (!state.cart) return 0;
+    const it = state.cart.items.find((i) => i.productId === id);
+    return it ? it.quantity : 0;
+  };
+
+  /* ============================ API ============================ */
+  async function api(path, opts) {
+    opts = opts || {};
+    const headers = {};
+    if (state.token) headers.Authorization = "Bearer " + state.token;
+    let body = opts.body;
+    if (body && !opts.raw) { headers["Content-Type"] = "application/json"; body = JSON.stringify(body); }
+    const res = await fetch(API + "/api" + path, { method: opts.method || "GET", headers, body });
+    if (res.status === 401) logout(false);
+    const text = await res.text();
+    let data = null;
+    try { data = text ? JSON.parse(text) : null; } catch (e) { data = text; }
+    if (!res.ok) {
+      const msg = data && data.message ? (Array.isArray(data.message) ? data.message.join(", ") : data.message) : ("Ошибка " + res.status);
+      const err = new Error(msg); err.status = res.status; throw err;
+    }
+    return data;
+  }
+
+  /* ============================ AUTH ============================ */
+  function setAuth(auth) {
+    state.token = auth.accessToken; state.user = auth.user;
+    sessionStorage.setItem("token", state.token);
+    sessionStorage.setItem("user", JSON.stringify(state.user));
+  }
+  function logout(go) {
+    state.token = ""; state.user = null; state.cart = null; state.orders = [];
+    sessionStorage.removeItem("token"); sessionStorage.removeItem("user");
+    renderHeader();
+    if (go !== false) goTo("#/login");
+  }
+  async function loadUserData() {
+    if (!state.user) return;
+    try {
+      const r = await Promise.all([api("/cart"), api("/orders")]);
+      state.cart = r[0]; state.orders = r[1]; renderHeader();
+    } catch (e) { /* ignore */ }
+  }
+
+  /* ============================ COMPONENTS ============================ */
+  function customSelect(value, options, onChange) {
+    const sel = document.createElement("div");
+    sel.className = "select";
+    const btn = document.createElement("button");
+    btn.type = "button"; btn.className = "btn btn--secondary-outline btn--lg";
+    const label = (options.find((o) => o.value === value) || {}).label || "Выбрать";
+    btn.innerHTML = `<span>${esc(label)}</span><span class="chev">${I.chevronDown}</span>`;
+    sel.appendChild(btn);
+    let open = false, menu = null;
+    btn.addEventListener("click", () => {
+      open = !open; sel.classList.toggle("open", open);
+      if (menu) { menu.remove(); menu = null; }
+      if (open) {
+        menu = document.createElement("div"); menu.className = "menu";
+        options.forEach((o) => {
+          const d = document.createElement("div"); d.className = "opt"; d.textContent = o.label;
+          d.addEventListener("click", () => { open = false; sel.classList.remove("open"); if (menu) { menu.remove(); menu = null; } onChange(o.value); });
+          menu.appendChild(d);
+        });
+        sel.appendChild(menu);
+      }
+    });
+    document.addEventListener("mousedown", (e) => { if (!sel.contains(e.target) && menu) { open = false; sel.classList.remove("open"); menu.remove(); menu = null; } });
+    return sel;
+  }
+
+  function productCard(p) {
+    const q = cartQty(p.id);
+    const btn = q
+      ? `<div class="counter"><button data-action="dec-card" data-id="${p.id}">${I.minus}</button><span class="amount">${q}</span><button data-action="inc-card" data-id="${p.id}">${I.plus}</button></div>`
+      : `<button class="btn btn--primary btn--md card-add" data-action="add-card" data-id="${p.id}">В корзину</button>`;
+    return `<article class="product-card">
+      <div class="image" data-action="open" data-id="${p.id}"><img src="${esc(p.images && p.images[0] || "")}" alt="${esc(p.title)}" loading="lazy" /></div>
+      <div class="content">
+        <h3 class="title" data-action="open" data-id="${p.id}">${esc(p.title)}</h3>
+        <div class="rating">${stars(p.rating)}<span>(${p.rating})</span></div>
+        <div class="price-row"><span class="price">${money(p.price)}</span></div>
+        <div class="row between"><span class="category">Датасет</span><span class="stock-pill">${p.stockQuantity} шт</span></div>
+        ${btn}
+      </div>
+    </article>`;
+  }
+
+  /* ============================ HEADER ============================ */
+  function renderHeader() {
+    const h = location.hash || "#/";
+    const on = (p) => (p === "#/" ? (h === "#/" ? "active" : "") : (h.startsWith(p) ? "active" : ""));
+    $("#nav").innerHTML =
+      `<a href="#/" class="${on("#/")}">Каталог</a>` +
+      `<a href="#/orders" class="${on("#/orders")}">Покупки</a>` +
+      `<a href="#/about" class="${on("#/about")}">О нас</a>`;
+
+    const count = state.cart ? state.cart.itemCount : 0;
+    let a = `<a class="icon-link" href="#/cart">${I.cart}${count ? `<span class="badge">${count}</span>` : ""}</a>`;
+    if (isAdmin()) a += `<a class="icon-link" href="#/admin" title="Админ">⚙</a>`;
+    if (state.user) {
+      a += `<span class="who" title="${esc(state.user.email)}">${esc(state.user.email)}</span>`;
+      a += `<button class="btn btn--secondary-outline btn--sm" data-action="logout">Выйти</button>`;
+    } else {
+      a += `<a class="btn btn--primary btn--md" href="#/login">Войти</a>`;
+    }
+    $("#actions").innerHTML = a;
+  }
+
+  /* ============================ ROUTER ============================ */
+  const goTo = (h) => { location.hash = h; };
+  window.addEventListener("hashchange", route);
+  let searchTimer = null;
+  function bindSearch() {
+    const inp = $("#searchInput");
+    inp.value = state.q.search;
+    inp.oninput = (e) => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        state.q.search = e.target.value; state.q.page = 1;
+        if ((location.hash || "#/") !== "#/") goTo("#/"); else loadCatalog();
+      }, 400);
+    };
+    inp.onkeydown = (e) => { if (e.key === "Enter") { e.preventDefault(); state.q.search = inp.value; state.q.page = 1; if ((location.hash || "#/") !== "#/") goTo("#/"); else loadCatalog(); } };
+  }
+
+  async function route() {
+    const parts = (location.hash.replace(/^#\/?/, "") || "").split("/");
+    const view = parts[0], arg = parts[1];
+    renderHeader();
+    try {
+      if (view === "product") return await viewProduct(arg);
+      if (view === "cart") return await viewCart();
+      if (view === "orders") return await viewOrders();
+      if (view === "about") return viewAbout();
+      if (view === "login") return viewAuth();
+      if (view === "admin") return await viewAdmin();
+      return await viewCatalog();
+    } catch (e) { fail(e); }
+  }
+
+  /* ============================ CATALOG (145/148) ============================ */
+  async function viewCatalog() {
+    setView(`
+      <div class="page">
+        <div class="heading">
+          <h1>Датасеты</h1>
+          <p>Готовые наборы данных для аналитики, ML и исследований</p>
+        </div>
+        <div class="panel" id="panel"></div>
+        <div class="grid-products" id="list"></div>
+        <div class="pager" id="pager"></div>
+      </div>`);
+    renderPanel();
+    await loadCatalog();
+  }
+
+  function renderPanel() {
+    const panel = $("#panel");
+    panel.innerHTML = `
+      <div class="controls">
+        <div class="left">
+          <button class="btn btn--secondary-outline btn--lg" data-action="toggle-filters"><span class="ic">${I.filter}</span>${state.filtersOpen ? "Скрыть фильтры" : "Показать фильтры"}</button>
+          <span id="catCount" class="count">Показано: ${state.meta.total}</span>
+        </div>
+      </div>
+      <div id="filtersHost"></div>`;
+    renderFilters();
+  }
+
+  function renderFilters() {
+    const host = $("#filtersHost");
+    if (!state.filtersOpen) { host.innerHTML = ""; return; }
+    host.innerHTML = `
+      <div class="filters">
+        <div class="grid">
+          <div class="section">
+            <span>Минимальный рейтинг</span>
+            <div class="input"><input type="number" min="0" max="5" step="0.1" id="fRating" placeholder="От" value="${esc(state.q.min_rating)}" /></div>
+          </div>
+          <div class="section">
+            <span>Диапазон цены</span>
+            <div class="range-wrap" id="range">
+              <div class="range-track"></div><div class="range-fill" id="rangeFill"></div>
+              <input type="range" id="pMin" min="0" max="5000" step="50" value="${state.q.min_price === "" ? 0 : state.q.min_price}" />
+              <input type="range" id="pMax" min="0" max="5000" step="50" value="${state.q.max_price === "" ? 5000 : state.q.max_price}" />
+            </div>
+            <div class="range-labels"><span id="lMin"></span><span id="lMax"></span></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn--primary-outline btn--md" data-action="clear-filters">Сбросить фильтры</button>
+          <button class="btn btn--primary btn--md" data-action="apply-filters">Применить</button>
+        </div>
+      </div>`;
+    const pMin = $("#pMin"), pMax = $("#pMax"), fill = $("#rangeFill");
+    const upd = () => {
+      let a = +pMin.value, b = +pMax.value;
+      if (a > b) { const t = a; a = b; b = t; pMin.value = a; pMax.value = b; }
+      fill.style.left = (a / 5000 * 100) + "%";
+      fill.style.width = ((b - a) / 5000 * 100) + "%";
+      $("#lMin").textContent = money(a);
+      $("#lMax").textContent = money(b);
+    };
+    pMin.addEventListener("input", upd); pMax.addEventListener("input", upd);
+    upd();
+  }
+
+  async function loadCatalog() {
+    const list = $("#list");
+    list.innerHTML = `<div class="spinner" style="grid-column:1/-1"></div>`;
+    const p = new URLSearchParams();
+    ["search", "sort_by", "order", "page", "limit", "min_price", "max_price", "min_rating"].forEach((k) => {
+      if (state.q[k] !== "" && state.q[k] != null) p.set(k, state.q[k]);
+    });
+    const data = await api("/products?" + p.toString());
+    state.products = data.items; state.meta = data.meta;
+    list.innerHTML = state.products.length ? state.products.map(productCard).join("")
+      : info("Ничего не найдено", "Измените параметры поиска или фильтры");
+    renderPager();
+    const count = $("#catCount"); if (count) count.textContent = "Показано: " + state.meta.total;
+  }
+
+  function renderPager() {
+    const m = state.meta;
+    $("#pager").innerHTML = m.totalPages > 1
+      ? `<button data-page="${m.page - 1}" ${m.page <= 1 ? "disabled" : ""}>${I.chevronLeft}</button>
+         <span>Стр. ${m.page} из ${m.totalPages} · всего ${m.total}</span>
+         <button data-page="${m.page + 1}" ${m.page >= m.totalPages ? "disabled" : ""}>${I.chevronRight}</button>`
+      : `<span>Всего: ${m.total}</span>`;
+  }
+
+  /* ============================ PRODUCT (149) ============================ */
+  async function viewProduct(id) {
+    setView(`<div class="page"><div class="spinner"></div></div>`);
+    const p = await api("/products/" + id);
+    state.product = p; state.picked = 0;
+    const pics = (p.images && p.images.length) ? p.images : ["", "", ""];
+    const owned = state.user && state.orders.some((o) => o.status === "paid" && o.items.some((i) => i.productId === p.id));
+    const specs = [
+      ["Формат", "CSV / JSON"],
+      ["В наличии", p.stockQuantity + " шт"],
+      ["Рейтинг", String(p.rating)],
+      ["Идентификатор", p.id.slice(0, 8)],
+      ["Лицензия", "Коммерческая"],
+      ["Обновление", "Ежемесячно"]
+    ].map(([k, v]) => `<div class="item"><div class="k">${k}</div><div class="v">${esc(v)}</div></div>`).join("");
+
+    setView(`
+      <div class="page">
+        <nav class="breadcrumbs"><a href="#/">Каталог</a><span>/</span><span>${esc(p.title)}</span></nav>
+        <div class="product-layout">
+          <div class="gallery">
+            <div class="main">
+              <img id="shot" src="${esc(pics[0])}" alt="${esc(p.title)}" />
+              <button class="arrow left" data-action="prev" data-count="${pics.length}" style="display:none">${I.chevronLeft}</button>
+              <button class="arrow right" data-action="next" data-count="${pics.length}">${I.chevronRight}</button>
+            </div>
+            <div class="thumbs" id="thumbs">${pics.map((u, i) => `<button class="thumb ${i === 0 ? "active" : ""}" data-thumb="${i}"><img src="${esc(u)}" alt="" /></button>`).join("")}</div>
+          </div>
+          <div class="pinfo">
+            <h1>${esc(p.title)}</h1>
+            <div class="rating">${stars(p.rating, 22)}<span>(${p.rating})</span></div>
+            <div class="price">${money(p.price)}<span class="unit">/ лицензия</span></div>
+            <div class="attr-row">
+              <div class="attr"><span class="ic">${I.truck}</span><div><div class="t">Мгновенная доставка</div><div class="d">Ссылка приходит после оплаты</div></div></div>
+              <div class="attr"><span class="ic">${I.shield}</span><div><div class="t">Гарантия качества</div><div class="d">Проверенные источники</div></div></div>
+              <div class="attr"><span class="ic">${I.box}</span><div><div class="t">Лицензия</div><div class="d">Коммерческое использование</div></div></div>
+            </div>
+            <div class="quantity">
+              <h2>Количество</h2>
+              <div class="qty-controls">
+                <button class="btn btn--secondary-outline btn--lg" data-action="q-dec">−</button>
+                <input id="qty" type="number" min="1" max="99" value="1" />
+                <button class="btn btn--secondary-outline btn--lg" data-action="q-inc">+</button>
+              </div>
+            </div>
+            <div class="action-btns">
+              <button class="btn btn--primary btn--xl add-cart-big" data-action="add-detail" data-id="${p.id}"><span class="ic">${I.cart}</span>В корзину${cartQty(p.id) ? `<span class="cbadge">${cartQty(p.id)}</span>` : ""}</button>
+              ${owned ? `<button class="btn btn--primary-outline btn--xl" data-action="download" data-id="${p.id}">Скачать датасет</button>` : `<button class="btn btn--primary-outline btn--xl" data-action="buy-now" data-id="${p.id}">Купить сейчас</button>`}
+            </div>
+            <div class="description"><h2>Описание</h2><p>${esc(p.description)}</p></div>
+            <div class="collapse open" data-collapse>
+              <button class="trigger" data-action="collapse"><span class="tt">Характеристики</span><span class="chev">${I.chevronDown}</span></button>
+              <div class="content"><div class="inner"><div class="specs">${specs}</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="related"><h2>Похожие датасеты</h2><div class="carousel" id="related"></div></div>
+      </div>`);
+    updateArrows();
+    loadRelated(p.id);
+  }
+
+  function updateArrows() {
+    const imgs = state.product.images || [];
+    const left = $(".gallery .arrow.left"), right = $(".gallery .arrow.right");
+    if (!left || !right) return;
+    left.style.display = state.picked > 0 ? "" : "none";
+    right.style.display = state.picked < imgs.length - 1 ? "" : "none";
+  }
+  async function loadRelated(id) {
+    try {
+      const d = await api("/products?limit=6");
+      const items = d.items.filter((x) => x.id !== id).slice(0, 6);
+      const host = $("#related"); if (host) host.innerHTML = items.map(productCard).join("") || info("Похожих нет", "");
+    } catch (e) { /* ignore */ }
+  }
+
+  /* ============================ CART (150) ============================ */
+  async function viewCart() {
+    if (!state.user) return goTo("#/login");
+    setView(`<div class="page"><div class="spinner"></div></div>`);
+    state.cart = await api("/cart"); renderHeader();
+    const c = state.cart;
+    if (!c.items.length) {
+      setView(`<div class="page">${info("Корзина пуста", "Добавьте датасеты из каталога", `<a class="btn btn--primary btn--md" href="#/">В каталог</a>`)}</div>`);
+      return;
+    }
+    setView(`
+      <div class="page">
+        <h1 class="page-title">Корзина</h1>
+        <div class="cart-grid">
+          <div class="cart-left">
+            <div class="cart-box">
+              <div class="cart-head"><div>Товар</div><div class="c">Цена</div><div class="c">Количество</div><div class="r">Итого</div></div>
+              ${c.items.map(cartRow).join("")}
+            </div>
+            <div class="promo">
+              <h3>Есть промокод?</h3>
+              <div class="row">
+                <div class="input"><input id="promo" placeholder="Введите промокод" value="${esc(c.promoCode ? c.promoCode.code : "")}" ${c.promoCode ? "disabled" : ""} /></div>
+                <button class="btn btn--primary btn--md" data-action="apply-promo">Применить</button>
+                <button class="btn btn--primary-outline btn--md" data-action="reset-promo">Сбросить</button>
+              </div>
+              ${c.promoCode ? `<p class="ok">Промокод «${esc(c.promoCode.code)}» применён. Скидка ${c.promoCode.discountPercentage}%</p>` : ""}
+            </div>
+          </div>
+          <div class="cart-right">
+            <div class="summary">
+              <h2>Итого</h2>
+              <div class="lines">
+                <div><span>Сумма</span><span>${money(c.subtotal)}</span></div>
+                <div><span class="acc">Скидка</span><span class="acc">−${money(c.discount)}</span></div>
+              </div>
+              <div class="total"><span>Всего</span><span>${money(c.total)}</span></div>
+              <div class="controls">
+                <button class="btn btn--primary btn--xl" data-action="checkout">Оформить заказ <span class="ic">${I.arrow}</span></button>
+                <button class="btn btn--secondary-outline btn--lg" data-action="continue">Продолжить покупки</button>
+              </div>
+            </div>
+            <div class="shipping">
+              <h3>Информация о доставке</h3>
+              <div class="it"><span class="ic">${I.location}</span><div><div class="label">Способ</div><div class="value">Скачивание по подписанной ссылке</div></div></div>
+              <div class="it"><span class="ic">${I.calendar}</span><div><div class="label">Срок ссылки</div><div class="value">60 секунд после запроса</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>`);
+  }
+
+  function cartRow(i) {
+    return `<div class="cart-item">
+      <div class="cart-prod">
+        <a href="#/product/${i.productId}"><img src="${esc(i.image || "")}" alt="" /></a>
+        <div><a class="name" href="#/product/${i.productId}">${esc(i.title)}</a><p class="cat">Датасет</p></div>
+      </div>
+      <div class="cart-price">${money(i.price)}</div>
+      <div class="cart-qty">
+        <button data-action="q-dec-cart" data-id="${i.id}">−</button><span>${i.quantity}</span><button data-action="q-inc-cart" data-id="${i.id}">+</button>
+      </div>
+      <div class="cart-total"><span>${money(i.lineTotal)}</span><button class="trash" data-action="rm" data-id="${i.id}" title="Удалить">${I.trash}</button></div>
+    </div>`;
+  }
+
+  /* ============================ ORDERS ============================ */
+  async function viewOrders() {
+    if (!state.user) return goTo("#/login");
+    setView(`<div class="page"><div class="spinner"></div></div>`);
+    state.orders = await api("/orders");
+    if (!state.orders.length) { setView(`<div class="page">${info("Покупок пока нет", "Оформите первый заказ", `<a class="btn btn--primary btn--md" href="#/">В каталог</a>`)}</div>`); return; }
+    setView(`
+      <div class="page">
+        <h1 class="page-title">Мои покупки</h1>
+        ${state.orders.map((o) => `
+          <div class="card order">
+            <div class="oh">
+              <div><b>Заказ ${o.id.slice(0, 8)}</b> <span style="color:var(--color-text-secondary)">· ${new Date(o.createdAt).toLocaleString("ru-RU")}</span></div>
+              <div style="display:flex;align-items:center;gap:12px"><span class="badge">${o.status}</span><span class="price">${money(o.total)}</span></div>
+            </div>
+            ${o.items.map((it) => `
+              <div class="oitem">
+                <div class="grow"><div class="oi-name">${esc(it.title)}</div><div class="oi-sub">${money(it.unitPrice)} × ${it.quantity} = ${money(it.lineTotal)}</div></div>
+                ${it.productId ? `<a class="btn btn--secondary-outline btn--sm" href="#/product/${it.productId}">Открыть</a>` : ""}
+                ${it.productId ? `<button class="btn btn--primary btn--sm" data-action="download" data-id="${it.productId}">Скачать</button>` : ""}
+              </div>`).join("")}
+          </div>`).join("")}
+      </div>`);
+  }
+
+  /* ============================ ABOUT ============================ */
+  function viewAbout() {
+    setView(`
+      <div class="page">
+        <section class="about-hero heading heading--center">
+          <h1>О DataShop</h1>
+          <p>Ваш надёжный источник наборов данных</p>
+        </section>
+        <section class="about-section">
+          <h2>Наша история</h2>
+          <div class="about-block">
+            <p>DataShop — маркетплейс, где собраны структурированные датасеты для аналитики, машинного обучения и исследований. Мы объединяем поставщиков качественных данных и специалистов, которым нужен готовый материал для работы.</p>
+            <p>Наша цель — сделать доступ к данным простым: прозрачная цена, мгновенная доставка по подписанной ссылке и честная лицензия. Каждый набор проходит проверку перед публикацией.</p>
+            <p>Мы постоянно расширяем каталог и следим за тем, чтобы данные были актуальными и пригодными к использованию.</p>
+          </div>
+        </section>
+        <section class="about-section">
+          <h2>Наши принципы</h2>
+          <div class="values">
+            <div class="value"><span class="emoji">🎯</span><h3>Качество данных</h3><p>Публикуем только проверенные и структурированные наборы.</p></div>
+            <div class="value"><span class="emoji">⚡</span><h3>Мгновенная доставка</h3><p>Скачивание сразу после оплаты по защищённой ссылке.</p></div>
+            <div class="value"><span class="emoji">💯</span><h3>Прозрачность</h3><p>Честные цены и понятные условия лицензии.</p></div>
+          </div>
+        </section>
+        <section class="about-section">
+          <h2>Связаться с нами</h2>
+          <div class="values" style="grid-template-columns:repeat(3,1fr)">
+            <div class="value"><h3>Email</h3><p>support@datashop.local</p></div>
+            <div class="value"><h3>Телефон</h3><p>+7 (800) 000-00-00</p></div>
+            <div class="value"><h3>Адрес</h3><p>г. Москва, ул. Данных, 1</p></div>
+          </div>
+        </section>
+      </div>`);
+  }
+
+  /* ============================ AUTH ============================ */
+  function viewAuth() {
+    setView(`
+      <div class="page">
+        <div class="card auth">
+          <div class="tabs">
+            <button class="btn btn--primary btn--sm" data-action="tab" data-tab="login">Вход</button>
+            <button class="btn btn--ghost btn--sm" data-action="tab" data-tab="register">Регистрация</button>
+          </div>
+          <form id="authForm">
+            <div class="field"><label>Email</label><div class="input"><input name="email" type="email" required placeholder="you@example.com" /></div></div>
+            <div class="field"><label>Пароль</label><div class="input"><input name="password" type="password" required minlength="8" placeholder="не менее 8 символов" /></div></div>
+            <button class="btn btn--primary btn--lg" id="authSubmit" style="width:100%">Войти</button>
+          </form>
+        </div>
+      </div>`);
+    let mode = "login";
+    $$("[data-tab]").forEach((b) => b.addEventListener("click", () => {
+      mode = b.dataset.tab;
+      $$("[data-tab]").forEach((x) => { x.className = "btn btn--sm " + (x.dataset.tab === mode ? "btn--primary" : "btn--ghost"); });
+      $("#authSubmit").textContent = mode === "login" ? "Войти" : "Зарегистрироваться";
+    }));
+    $("#authForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = new FormData(e.target);
+      try {
+        const auth = await api("/auth/" + mode, { method: "POST", body: { email: f.get("email"), password: f.get("password") } });
+        setAuth(auth); toast("Добро пожаловать, " + auth.user.email, "ok");
+        await loadUserData(); goTo("#/");
+      } catch (err) { fail(err); }
+    });
+  }
+
+  /* ============================ ADMIN ============================ */
+  async function viewAdmin() {
+    if (!isAdmin()) return goTo("#/");
+    const d = await api("/products?limit=100");
+    setView(`
+      <div class="page">
+        <h1 class="page-title">Админ</h1>
+        <div class="admin-grid">
+          <form class="card" id="newForm">
+            <h2 style="margin-bottom:16px">Новый датасет</h2>
+            <div class="field"><label>Название</label><div class="input"><input name="title" required minlength="3" /></div></div>
+            <div class="field"><label>Описание</label><div class="input"><input name="description" required /></div></div>
+            <div style="display:flex;gap:12px">
+              <div class="field" style="flex:1"><label>Цена</label><div class="input"><input name="price" type="number" min="0" step="0.01" required /></div></div>
+              <div class="field" style="flex:1"><label>Рейтинг</label><div class="input"><input name="rating" type="number" min="0" max="5" step="0.1" value="4.5" /></div></div>
+              <div class="field" style="flex:1"><label>Остаток</label><div class="input"><input name="stockQuantity" type="number" min="0" value="10" /></div></div>
+            </div>
+            <div class="field"><label>Изображения (минимум 3 URL через запятую)</label><div class="input"><input name="images" placeholder="https://..., https://..., https://..." /></div></div>
+            <button class="btn btn--primary btn--lg" style="width:100%">Создать</button>
+          </form>
+          <div class="card">
+            <h2 style="margin-bottom:16px">Файлы</h2>
+            <div class="field"><label>Датасет</label>
+              <div class="select" style="width:100%"><select id="target" style="width:100%;border:1px solid var(--color-border);border-radius:8px;height:42px;padding:0 10px">
+                ${d.items.map((p) => `<option value="${p.id}">${esc(p.title)}</option>`).join("")}
+              </select></div>
+            </div>
+            <div class="field"><label>Превью (изображение)</label><div class="file"><input type="file" id="prev" accept="image/*" /><button class="btn btn--secondary-outline btn--md" data-action="upload-preview">Загрузить</button></div></div>
+            <div class="field"><label>Файл датасета</label><div class="file"><input type="file" id="ds" /><button class="btn btn--secondary-outline btn--md" data-action="upload-dataset">Загрузить</button></div></div>
+            <p style="font-size:13px;color:var(--color-text-secondary)">Превью публичное; датасет приватный, скачивание — только покупателю по подписанной ссылке.</p>
+          </div>
+        </div>
+      </div>`);
+    $("#newForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const f = new FormData(e.target);
+      const images = String(f.get("images") || "").split(",").map((s) => s.trim()).filter(Boolean);
+      try {
+        await api("/products", { method: "POST", body: {
+          title: f.get("title"), description: f.get("description"), price: Number(f.get("price")),
+          rating: Number(f.get("rating") || 0), stockQuantity: Number(f.get("stockQuantity") || 0), images
+        } });
+        toast("Датасет создан", "ok"); await viewAdmin();
+      } catch (err) { fail(err); }
+    });
+  }
+  async function upload(which) {
+    const file = $(which === "preview" ? "#prev" : "#ds").files[0];
+    if (!file) return toast("Выберите файл", "err");
+    const fd = new FormData(); fd.append("file", file);
+    const path = which === "preview" ? "/admin/media/preview" : "/admin/media/dataset/" + $("#target").value;
+    try { await api(path, { method: "POST", body: fd, raw: true }); toast("Загружено", "ok"); }
+    catch (e) { fail(e); }
+  }
+
+  /* ============================ INFO BLOCK ============================ */
+  function info(title, text, actions) {
+    return `<div class="info"><div class="box"><h1>${esc(title)}</h1>${text ? `<p>${esc(text)}</p>` : ""}${actions ? `<div class="act">${actions}</div>` : ""}</div></div>`;
+  }
+
+  /* ============================ EVENTS ============================ */
+  let docBound = false;
+  function bindDoc() {
+    if (docBound) return; docBound = true;
+    document.addEventListener("click", onDocClick);
+  }
+  async function onDocClick(e) {
+    const el = e.target.closest("[data-action]");
+    if (!el) return;
+    const a = el.dataset.action, id = el.dataset.id;
+    try {
+      if (a === "logout") return logout();
+      if (a === "newsletter") return toast("Подписка оформлена (демо)", "ok");
+      if (a === "open") return goTo("#/product/" + id);
+      if (a === "toggle-filters") { state.filtersOpen = !state.filtersOpen; renderPanel(); return; }
+      if (a === "clear-filters") { state.q.min_price = ""; state.q.max_price = ""; state.q.min_rating = ""; state.q.page = 1; renderFilters(); await loadCatalog(); return; }
+      if (a === "apply-filters") {
+        const a1 = +$("#pMin").value, b1 = +$("#pMax").value;
+        state.q.min_price = a1 > 0 ? a1 : "";
+        state.q.max_price = b1 < 5000 ? b1 : "";
+        state.q.min_rating = $("#fRating").value || "";
+        state.q.page = 1; await loadCatalog(); return;
+      }
+      if (a === "prev" || a === "next") {
+        const imgs = state.product.images;
+        state.picked = Math.max(0, Math.min(imgs.length - 1, state.picked + (a === "next" ? 1 : -1)));
+        $("#shot").src = imgs[state.picked];
+        $$("#thumbs .thumb").forEach((t, i) => t.classList.toggle("active", i === state.picked));
+        updateArrows(); return;
+      }
+      if (a === "q-inc" || a === "q-dec") { const q = $("#qty"); q.value = Math.max(1, Math.min(99, +q.value + (a === "q-inc" ? 1 : -1))); return; }
+      if (a === "collapse") { const c = el.closest("[data-collapse]"); c.classList.toggle("open"); return; }
+      if (a === "add-card") { if (!state.user) return goTo("#/login"); await api("/cart/items", { method: "POST", body: { productId: id, quantity: 1 } }); await loadUserData(); await refreshCatalogIfAny(); return; }
+      if (a === "inc-card" || a === "dec-card") {
+        if (!state.user) return goTo("#/login");
+        const cur = cartQty(id); const q = Math.max(1, cur + (a === "inc-card" ? 1 : -1));
+        const item = state.cart.items.find((i) => i.productId === id);
+        await api("/cart/items/" + item.id, { method: "PATCH", body: { quantity: q } });
+        await loadUserData(); await refreshCatalogIfAny(); return;
+      }
+      if (a === "add-detail") {
+        if (!state.user) return goTo("#/login");
+        await api("/cart/items", { method: "POST", body: { productId: id, quantity: +$("#qty").value || 1 } });
+        await loadUserData(); toast("Добавлено в корзину", "ok"); return;
+      }
+      if (a === "buy-now") {
+        if (!state.user) return goTo("#/login");
+        await api("/cart/items", { method: "POST", body: { productId: id, quantity: +$("#qty").value || 1 } });
+        await loadUserData(); goTo("#/cart"); return;
+      }
+      if (a === "q-inc-cart" || a === "q-dec-cart") {
+        const cur = state.cart.items.find((i) => i.id === id);
+        const q = Math.max(1, cur.quantity + (a === "q-inc-cart" ? 1 : -1));
+        await api("/cart/items/" + id, { method: "PATCH", body: { quantity: q } }); return viewCart();
+      }
+      if (a === "rm") { await api("/cart/items/" + id, { method: "DELETE" }); return viewCart(); }
+      if (a === "apply-promo") { await api("/cart/apply-promo", { method: "POST", body: { code: $("#promo").value.trim() } }); toast("Промокод применён", "ok"); return viewCart(); }
+      if (a === "reset-promo") { await api("/cart/apply-promo", { method: "DELETE" }); return viewCart(); }
+      if (a === "checkout") { await api("/orders/checkout", { method: "POST" }); await loadUserData(); toast("Заказ оформлен", "ok"); goTo("#/orders"); return; }
+      if (a === "continue") return goTo("#/");
+      if (a === "download") { const dl = await api("/downloads/" + id); toast("Ссылка на " + dl.expiresIn + " c", "ok"); window.open(dl.url, "_blank", "noopener"); return; }
+      if (a === "upload-preview") return upload("preview");
+      if (a === "upload-dataset") return upload("dataset");
+    } catch (err) { fail(err); }
+  }
+  async function refreshCatalogIfAny() {
+    if ((location.hash || "#/") === "#/" || location.hash === "") {
+      const list = $("#list"); if (list) { list.innerHTML = state.products.map(productCard).join(""); }
+    }
+  }
+  document.addEventListener("click", (e) => {
+    const th = e.target.closest("[data-thumb]");
+    if (th && state.product) {
+      state.picked = +th.dataset.thumb; $("#shot").src = state.product.images[state.picked];
+      $$("#thumbs .thumb").forEach((t, i) => t.classList.toggle("active", i === state.picked)); updateArrows();
+    }
+    const pg = e.target.closest("[data-page]");
+    if (pg && !pg.disabled) { state.q.page = +pg.dataset.page; loadCatalog().catch(fail); }
+  });
+
+  /* ============================ BOOT ============================ */
+  applyIcons(document); setIconBtn(document); bindDoc(); bindSearch();
+  (async function boot() {
+    if (state.user) await loadUserData();
+    if (!location.hash) location.hash = "#/";
+    route();
+  })();
+})();
+</script>
+</body>
+</html>
