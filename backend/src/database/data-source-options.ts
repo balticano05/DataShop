@@ -25,17 +25,21 @@ export const entities = [
 export interface DataSourceOptionsInput {
   url: string;
   logging?: boolean;
+  migrations?: boolean;
 }
 
 export function buildDataSourceOptions({
   url,
   logging = false,
+  migrations = false,
 }: DataSourceOptionsInput): DataSourceOptions {
   return {
     type: 'postgres',
     url,
     entities,
-    migrations: [join(currentDir, 'migrations', `*.${extension}`)],
+    migrations: migrations
+      ? [join(currentDir, 'migrations', `*.${extension}`)]
+      : [],
     synchronize: false,
     logging: logging ? ['query', 'error'] : ['error'],
   };

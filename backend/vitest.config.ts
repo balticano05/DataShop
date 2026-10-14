@@ -9,5 +9,18 @@ export default defineConfig({
     globals: true,
     root: './',
     include: ['**/*.spec.ts'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      include: ['src/**/*.ts'],
+      exclude: [
+        'src/main.ts',
+        'src/**/*.module.ts',
+        'src/**/*.dto.ts',
+        'src/database/migrations/**',
+        'src/database/seeds/**',
+        'src/config/**',
+      ],
+    },
   },
 });

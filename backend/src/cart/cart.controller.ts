@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -40,7 +41,7 @@ export class CartController {
 
   @Post('items')
   @ApiOperation({ summary: 'Add a product to the cart' })
-  @ApiOkResponse({ type: CartResponseDto })
+  @ApiCreatedResponse({ type: CartResponseDto })
   @ApiErrors(400, 401, 404, 409)
   addItem(
     @CurrentUser() user: AuthenticatedUser,
@@ -76,7 +77,7 @@ export class CartController {
 
   @Post('apply-promo')
   @ApiOperation({ summary: 'Apply a promo code to the cart' })
-  @ApiOkResponse({ type: CartResponseDto })
+  @ApiCreatedResponse({ type: CartResponseDto })
   @ApiErrors(400, 401, 404)
   applyPromo(
     @CurrentUser() user: AuthenticatedUser,
