@@ -47,9 +47,9 @@ export class UpdateProductDto {
   @ApiPropertyOptional({
     description: 'At least 3 image URLs',
     example: [
-      'https://picsum.photos/seed/datashop-1-1/800/600',
-      'https://picsum.photos/seed/datashop-1-2/800/600',
-      'https://picsum.photos/seed/datashop-1-3/800/600',
+      'https://placehold.co/800x600/1e293b/ffffff/png?text=TSLA&font=montserrat',
+      'https://placehold.co/800x600/1e293b/ffffff/png?text=TSLA%0APREVIEW%201&font=montserrat',
+      'https://placehold.co/800x600/1e293b/ffffff/png?text=TSLA%0APREVIEW%202&font=montserrat',
     ],
     minItems: 3,
   })

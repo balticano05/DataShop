@@ -25,7 +25,7 @@ export class CartItemResponse {
   lineTotal: number;
 
   @ApiProperty({
-    example: 'https://picsum.photos/seed/datashop-1-1/800/600',
+    example: 'https://placehold.co/800x600/1e293b/ffffff/png?text=TSLA&font=montserrat',
     nullable: true,
   })
   image: string | null;
