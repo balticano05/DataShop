@@ -6,6 +6,7 @@ import helmet from 'helmet';
 import { Logger } from 'nestjs-pino';
 import { AppModule } from './app.module.js';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter.js';
+import { setupSwagger } from './config/swagger.config.js';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -36,6 +37,8 @@ async function bootstrap(): Promise<void> {
     origin: config.get<string[]>('app.corsOrigins', []),
     credentials: true,
   });
+
+  setupSwagger(app);
 
   app.enableShutdownHooks();
 

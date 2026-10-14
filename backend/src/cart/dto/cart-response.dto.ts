@@ -1,32 +1,67 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Cart } from '../../database/entities/cart.entity.js';
 import {
   calculateCartTotals,
   roundCurrency,
 } from '../cart-calculator.js';
 
-export interface CartItemResponse {
+export class CartItemResponse {
+  @ApiProperty({ example: 'c1a2b3c4-d5e6-7f80-9a1b-2c3d4e5f6a7b' })
   id: string;
+
+  @ApiProperty({ example: '9b2c1d3e-4f5a-6b7c-8d9e-0f1a2b3c4d5e' })
   productId: string;
+
+  @ApiProperty({ example: 'Акции Tesla 2019–2024' })
   title: string;
+
+  @ApiProperty({ example: 1499.0 })
   price: number;
+
+  @ApiProperty({ example: 2 })
   quantity: number;
+
+  @ApiProperty({ example: 2998.0 })
   lineTotal: number;
+
+  @ApiProperty({
+    example: 'https://picsum.photos/seed/datashop-1-1/800/600',
+    nullable: true,
+  })
   image: string | null;
+
+  @ApiProperty({ example: 25 })
   stockQuantity: number;
 }
 
-export interface CartPromoResponse {
+export class CartPromoResponse {
+  @ApiProperty({ example: 'SAVE10' })
   code: string;
+
+  @ApiProperty({ example: 10 })
   discountPercentage: number;
 }
 
 export class CartResponseDto {
+  @ApiProperty({ example: 'cart-0000-1111-2222-333344445555' })
   id: string;
+
+  @ApiProperty({ type: [CartItemResponse] })
   items: CartItemResponse[];
+
+  @ApiProperty({ example: 2, description: 'Total quantity of items' })
   itemCount: number;
+
+  @ApiProperty({ example: 2998.0 })
   subtotal: number;
+
+  @ApiProperty({ example: 299.8 })
   discount: number;
+
+  @ApiProperty({ example: 2698.2 })
   total: number;
+
+  @ApiProperty({ type: CartPromoResponse, nullable: true })
   promoCode: CartPromoResponse | null;
 
   static from(cart: Cart): CartResponseDto {
