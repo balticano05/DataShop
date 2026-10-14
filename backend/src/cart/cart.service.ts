@@ -89,6 +89,13 @@ export class CartService {
     return this.getCart(userId);
   }
 
+  async removePromo(userId: string): Promise<CartResponseDto> {
+    const cart = await this.getOrCreateCart(userId);
+    cart.promoCodeId = null;
+    await this.cartsRepository.save(cart);
+    return this.getCart(userId);
+  }
+
   private async getOrCreateCart(userId: string): Promise<Cart> {
     const existing = await this.cartsRepository.findOne({ where: { userId } });
     if (existing) {

@@ -85,4 +85,12 @@ export class CartController {
   ): Promise<CartResponseDto> {
     return this.cartService.applyPromo(user.id, dto);
   }
+
+  @Delete('apply-promo')
+  @ApiOperation({ summary: 'Remove the promo code from the cart' })
+  @ApiOkResponse({ type: CartResponseDto })
+  @ApiErrors(401)
+  removePromo(@CurrentUser() user: AuthenticatedUser): Promise<CartResponseDto> {
+    return this.cartService.removePromo(user.id);
+  }
 }

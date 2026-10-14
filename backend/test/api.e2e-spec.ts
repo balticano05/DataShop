@@ -202,6 +202,28 @@ describe('DataShop API (e2e, tasks 126-130)', () => {
       expect(res.body.discount).toBe(subtotal * 0.1);
       expect(res.body.total).toBe(subtotal * 0.9);
     });
+
+    it('removes the promo code and restores the full total', async () => {
+      const subtotal = PRODUCT_PRICE * 2;
+
+      const removed = await api()
+        .delete('/api/cart/apply-promo')
+        .set('Authorization', `Bearer ${buyer.token}`)
+        .expect(200);
+
+      expect(removed.body.promoCode).toBeNull();
+      expect(removed.body.discount).toBe(0);
+      expect(removed.body.total).toBe(subtotal);
+
+      const reApplied = await api()
+        .post('/api/cart/apply-promo')
+        .set('Authorization', `Bearer ${buyer.token}`)
+        .send({ code: PROMO_CODE })
+        .expect(201);
+
+      expect(reApplied.body.promoCode).toMatchObject({ code: PROMO_CODE });
+      expect(reApplied.body.total).toBe(subtotal * 0.9);
+    });
   });
 
   describe('130. checkout and download', () => {
