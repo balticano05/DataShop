@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Ошибка')}"></head>
+<body>
+<div class="shell">
+    <main>
+        <div class="container">
+            <div class="error-page">
+                <div class="code" th:text="${status}">500</div>
+                <h1 th:text="${title}">Ошибка</h1>
+                <p th:text="${message}">Что-то пошло не так.</p>
+                <a class="btn btn--primary btn--md" th:href="@{/}">На главную</a>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

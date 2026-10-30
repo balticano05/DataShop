@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer class="footer" th:fragment="footer">
+    <div class="container">
+        <div class="top">
+            <div class="col">
+                <div class="brand">DataShop</div>
+                <p class="desc">Маркетплейс наборов данных: покупайте и скачивайте датасеты для аналитики,
+                    ML и исследований.</p>
+            </div>
+            <div class="col">
+                <h4>Разделы</h4>
+                <a th:href="@{/}">Каталог</a>
+                <a th:href="@{/orders}">Мои покупки</a>
+                <a th:href="@{/cart}">Корзина</a>
+                <a th:href="@{/about}">О проекте</a>
+            </div>
+            <div class="col">
+                <h4>Помощь</h4>
+                <a th:href="@{/about}">Лицензии</a>
+                <a th:href="@{/about}">Доставка данных</a>
+                <a th:href="@{/about}">Политика конфиденциальности</a>
+            </div>
+            <div class="col">
+                <h4>Рассылка</h4>
+                <p>Подпишитесь на обновления каталога и акции.</p>
+                <div class="newsletter">
+                    <div class="input input--dark"><input placeholder="Ваш email"/></div>
+                    <button class="btn btn--primary" type="button" aria-label="Подписаться">✉</button>
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="contacts">
+                <div class="cc"><p class="ct">Телефон</p><p>+7 (800) 000-00-00</p></div>
+                <div class="cc"><p class="ct">Email</p><p>support@datashop.local</p></div>
+                <div class="cc"><p class="ct">Адрес</p><p>г. Москва, ул. Данных, 1</p></div>
+            </div>
+            <p class="copyright">© 2026 DataShop. Все права защищены.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

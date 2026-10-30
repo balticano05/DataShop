@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Корзина')}"></head>
+<body>
+<div class="shell">
+    <header th:replace="~{fragments/header :: header('cart')}"></header>
+    <main>
+        <div class="container">
+            <div class="page">
+                <h1 class="page-title">Корзина</h1>
+
+                <div class="info" th:if="${#lists.isEmpty(cart.items)}">
+                    <div class="box">
+                        <h1>Корзина пуста</h1>
+                        <p>Добавьте датасеты из каталога.</p>
+                        <div class="act"><a class="btn btn--primary btn--md" th:href="@{/}">В каталог</a></div>
+                    </div>
+                </div>
+
+                <div class="cart-grid" th:if="${!#lists.isEmpty(cart.items)}">
+                    <div class="cart-left">
+                        <div class="cart-box">
+                            <div class="cart-head">
+                                <div>Товар</div><div class="c">Цена</div><div class="c">Количество</div><div class="r">Итого</div>
+                            </div>
+                            <div class="cart-item" th:each="item : ${cart.items}">
+                                <div class="cart-prod">
+                                    <a th:href="@{/products/{id}(id=${item.productId})}">
+                                        <img th:src="${item.image != null ? item.image : ''}" alt=""/>
+                                    </a>
+                                    <div>
+                                        <a class="name" th:href="@{/products/{id}(id=${item.productId})}" th:text="${item.title}">Название</a>
+                                        <p class="cat">Датасет</p>
+                                    </div>
+                                </div>
+                                <div class="cart-price" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</div>
+                                <div class="cart-qty">
+                                    <form method="post" th:action="@{/cart/items/{id}/update(id=${item.id})}" class="inline-form">
+                                        <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                        <button type="submit" name="quantity" th:value="${item.quantity - 1}">−</button>
+                                        <span th:text="${item.quantity}">1</span>
+                                        <button type="submit" name="quantity" th:value="${item.quantity + 1}">+</button>
+                                    </form>
+                                </div>
+                                <div class="cart-total">
+                                    <span th:text="${#numbers.formatDecimal(item.lineTotal, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</span>
+                                    <form method="post" th:action="@{/cart/items/{id}/delete(id=${item.id})}" class="inline-form">
+                                        <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                        <button class="trash" type="submit" title="Удалить">🗑</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="promo">
+                            <h3>Есть промокод?</h3>
+                            <form th:if="${cart.promoCode == null}" method="post" th:action="@{/cart/promo}" class="row">
+                                <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                <div class="input"><input name="code" placeholder="Введите промокод"/></div>
+                                <button class="btn btn--primary btn--md" type="submit">Применить</button>
+                            </form>
+                            <div th:if="${cart.promoCode != null}">
+                                <p class="ok" th:text="'Промокод «' + ${cart.promoCode.code} + '» применён. Скидка ' + ${cart.promoCode.discountPercentage} + '%'">Промокод применён</p>
+                                <form method="post" th:action="@{/cart/promo/remove}">
+                                    <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                    <button class="btn btn--primary-outline btn--md" type="submit">Сбросить промокод</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cart-right">
+                        <div class="summary">
+                            <h2>Итого</h2>
+                            <div class="lines">
+                                <div><span>Сумма</span><span th:text="${#numbers.formatDecimal(cart.subtotal, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</span></div>
+                                <div><span class="acc">Скидка</span><span class="acc" th:text="'−' + ${#numbers.formatDecimal(cart.discount, 0, 'COMMA', 2, 'POINT')} + ' ₽'">−0 ₽</span></div>
+                            </div>
+                            <div class="total"><span>Всего</span><span th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</span></div>
+                            <div class="controls">
+                                <form method="post" th:action="@{/orders/checkout}">
+                                    <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                    <button class="btn btn--primary btn--xl" type="submit">Оформить заказ <span class="ic">→</span></button>
+                                </form>
+                                <a class="btn btn--secondary-outline btn--lg" th:href="@{/}">Продолжить покупки</a>
+                            </div>
+                        </div>
+                        <div class="shipping">
+                            <h3>Информация о доставке</h3>
+                            <div class="it"><span class="ic">📍</span><div><div class="label">Способ</div><div class="value">Скачивание по подписанной ссылке</div></div></div>
+                            <div class="it"><span class="ic">📅</span><div><div class="label">Срок ссылки</div><div class="value">60 секунд после запроса</div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+</body>
+</html>
