@@ -1,0 +1,33 @@
+.shell{min-height:100vh;display:flex;flex-direction:column}
+.shell main{flex:1 0 auto}
+.inline-form{display:inline-flex;margin:0}
+.header-search form{margin:0;width:100%}
+.header-search .input{width:100%}
+.header .actions{gap:10px}
+.auth-error{margin:0 0 16px;padding:10px 12px;border:1px solid #fecdd3;background:var(--color-danger-bg);color:var(--color-danger);border-radius:var(--radius-sm);font-size:14px}
+.form-note{font-size:13px;color:var(--color-text-secondary);margin:10px 0 0}
+.filters .section>span{display:block;font-size:14px;margin-bottom:8px}
+.filter-actions{display:flex;gap:10px;flex-wrap:wrap}
+.product-card .image a{display:block;width:100%;height:100%}
+.product-card .image img{width:100%;height:100%;object-fit:cover}
+.gallery .main img{width:100%;height:100%;object-fit:cover}
+.gallery .thumbs .thumb img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)}
+.breadcrumbs{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--color-text-secondary);margin:0 0 18px}
+.breadcrumbs a{color:var(--color-primary)}
+.detail-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
+.related .carousel{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.order-actions{display:flex;gap:8px;align-items:center}
+.admin-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+.admin-grid .card{padding:18px}
+.admin-list{margin-top:18px}
+.admin-list table{width:100%;border-collapse:collapse;font-size:14px}
+.admin-list th,.admin-list td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--color-border);vertical-align:top}
+.admin-list th{color:var(--color-text-secondary);font-weight:600}
+.file-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.file-row input[type=file]{max-width:100%}
+.empty-note{padding:28px;text-align:center;color:var(--color-text-secondary)}
+.error-page{max-width:620px;margin:60px auto;padding:32px;text-align:center}
+.error-page .code{font-size:64px;font-weight:800;color:var(--color-primary);line-height:1}
+.error-page h1{margin:12px 0}
+.error-page p{color:var(--color-text-secondary)}
+@media (max-width:900px){.admin-grid{grid-template-columns:1fr}.header-search{display:none}}
