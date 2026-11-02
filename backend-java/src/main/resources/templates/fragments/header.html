@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="header" th:fragment="header(active)">
+    <div class="container bar">
+        <a class="logo" th:href="@{/}">
+            <svg viewBox="0 0 500 500" aria-hidden="true">
+                <rect x="50" y="50" width="400" height="400" rx="90" fill="#F54900"/>
+                <text x="250" y="330" text-anchor="middle" font-family="Arial,Helvetica,sans-serif"
+                      font-weight="bold" font-size="210" fill="#fff">DS</text>
+            </svg>
+            <b>DataShop</b>
+        </a>
+        <nav class="nav">
+            <a th:href="@{/}" th:classappend="${active == 'catalog'} ? 'active' : ''">Каталог</a>
+            <a th:href="@{/orders}" th:classappend="${active == 'orders'} ? 'active' : ''">Покупки</a>
+            <a th:href="@{/about}" th:classappend="${active == 'about'} ? 'active' : ''">О нас</a>
+        </nav>
+        <div class="header-search">
+            <form method="get" th:action="@{/}">
+                <div class="input">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"/>
+                        <path d="m21 21-4.3-4.3"/>
+                    </svg>
+                    <input name="search" th:value="${query != null ? query.search : ''}"
+                           placeholder="Поиск датасетов..."/>
+                </div>
+            </form>
+        </div>
+        <div class="actions">
+            <a class="icon-link" th:href="@{/cart}" title="Корзина">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 7h13.79a2 2 0 0 1 1.99 2.2l-.6 6A2 2 0 0 1 18.19 17H8.64a2 2 0 0 1-1.96-1.61z"/>
+                    <path d="m5 7-.81-3.24A1 1 0 0 0 3.22 3H2m6 18h2m6 0h2"/>
+                </svg>
+                <span class="badge" th:if="${cartCount != null and cartCount > 0}" th:text="${cartCount}">0</span>
+            </a>
+            <a class="icon-link" th:if="${user != null and user.admin}" th:href="@{/admin}" title="Админ">⚙</a>
+            <span class="who" th:if="${user != null}" th:text="${user.email}">user@example.com</span>
+            <form class="inline-form" th:if="${user != null}" method="post" th:action="@{/logout}">
+                <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                <button class="btn btn--secondary-outline btn--sm" type="submit">Выйти</button>
+            </form>
+            <a class="btn btn--primary btn--md" th:if="${user == null}" th:href="@{/login}">Войти</a>
+        </div>
+    </div>
+</header>
+</body>
+</html>

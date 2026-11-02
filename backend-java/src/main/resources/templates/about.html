@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('О проекте')}"></head>
+<body>
+<div class="shell">
+    <header th:replace="~{fragments/header :: header('about')}"></header>
+    <main>
+        <div class="container">
+            <div class="page">
+                <section class="about-hero heading heading--center">
+                    <h1>О DataShop</h1>
+                    <p>Ваш надёжный источник наборов данных</p>
+                </section>
+                <section class="about-section">
+                    <h2>Наша история</h2>
+                    <div class="about-block">
+                        <p>DataShop — маркетплейс, где собраны структурированные датасеты для аналитики,
+                            машинного обучения и исследований.</p>
+                        <p>Наша цель — сделать доступ к данным простым: прозрачная цена, мгновенная доставка
+                            по подписанной ссылке и честная лицензия.</p>
+                    </div>
+                </section>
+                <section class="about-section">
+                    <h2>Наши принципы</h2>
+                    <div class="values">
+                        <div class="value"><span class="emoji">🎯</span><h3>Качество данных</h3><p>Публикуем только проверенные наборы.</p></div>
+                        <div class="value"><span class="emoji">⚡</span><h3>Быстрая доставка</h3><p>Ссылка на скачивание выдаётся сразу после оплаты.</p></div>
+                        <div class="value"><span class="emoji">🔒</span><h3>Безопасность</h3><p>Приватные файлы доступны только покупателям.</p></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+</body>
+</html>

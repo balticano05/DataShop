@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${product.title})}"></head>
+<body>
+<div class="shell">
+    <header th:replace="~{fragments/header :: header('catalog')}"></header>
+    <main>
+        <div class="container">
+            <div class="page">
+                <nav class="breadcrumbs">
+                    <a th:href="@{/}">Каталог</a><span>/</span><span th:text="${product.title}">Датасет</span>
+                </nav>
+                <div class="product-layout">
+                    <div class="gallery" data-gallery>
+                        <div class="main">
+                            <img data-gallery-main
+                                 th:src="${#lists.isEmpty(product.images) ? '' : product.images[0]}"
+                                 th:alt="${product.title}"/>
+                        </div>
+                        <div class="thumbs">
+                            <button class="thumb" type="button" th:each="img, stat : ${product.images}"
+                                    th:attr="data-src=${img}" th:classappend="${stat.first} ? 'active' : ''">
+                                <img th:src="${img}" alt=""/>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pinfo">
+                        <h1 th:text="${product.title}">Название</h1>
+                        <div class="rating">
+                            <span class="stars"><span class="base">★★★★★</span></span>
+                            <span th:text="'(' + ${product.rating} + ')'">(0)</span>
+                        </div>
+                        <div class="price">
+                            <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</span>
+                            <span class="unit">/ лицензия</span>
+                        </div>
+                        <div class="attr-row">
+                            <div class="attr"><span class="ic">🚚</span><div><div class="t">Мгновенная доставка</div><div class="d">Ссылка приходит после оплаты</div></div></div>
+                            <div class="attr"><span class="ic">🛡</span><div><div class="t">Гарантия качества</div><div class="d">Проверенные источники</div></div></div>
+                            <div class="attr"><span class="ic">📦</span><div><div class="t">Лицензия</div><div class="d">Коммерческое использование</div></div></div>
+                        </div>
+
+                        <div class="quantity">
+                            <h2>Количество</h2>
+                            <div class="qty-controls" data-quantity>
+                                <button class="btn btn--secondary-outline btn--lg" type="button" data-step="-1">−</button>
+                                <input type="number" min="1" max="99" value="1" id="quantity" form="addToCartForm" name="quantity"/>
+                                <button class="btn btn--secondary-outline btn--lg" type="button" data-step="1">+</button>
+                            </div>
+                        </div>
+
+                        <div class="action-btns">
+                            <form id="addToCartForm" method="post" th:action="@{/cart/items}" class="inline-form">
+                                <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                <input type="hidden" name="productId" th:value="${product.id}"/>
+                                <input type="hidden" name="next" th:value="${'/products/' + product.id}"/>
+                                <button class="btn btn--primary btn--xl add-cart-big" type="submit">
+                                    <span class="ic">🛒</span>В корзину
+                                    <span class="cbadge" th:if="${inCart > 0}" th:text="${inCart}">0</span>
+                                </button>
+                            </form>
+                            <form th:if="${owned}" method="post" th:action="@{/downloads/{id}(id=${product.id})}" class="inline-form">
+                                <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                <button class="btn btn--primary-outline btn--xl" type="submit">Скачать датасет</button>
+                            </form>
+                            <form th:if="${!owned}" method="post" th:action="@{/cart/items}" class="inline-form">
+                                <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                <input type="hidden" name="productId" th:value="${product.id}"/>
+                                <input type="hidden" name="quantity" value="1"/>
+                                <input type="hidden" name="next" value="/cart"/>
+                                <button class="btn btn--primary-outline btn--xl" type="submit">Купить сейчас</button>
+                            </form>
+                        </div>
+
+                        <div class="description">
+                            <h2>Описание</h2>
+                            <p th:text="${product.description}">Описание</p>
+                        </div>
+
+                        <div class="collapse open">
+                            <div class="trigger"><span class="tt">Характеристики</span></div>
+                            <div class="content"><div class="inner"><div class="specs">
+                                <div class="item"><div class="k">Формат</div><div class="v">CSV / JSON</div></div>
+                                <div class="item"><div class="k">В наличии</div><div class="v" th:text="${product.stockQuantity} + ' шт'">0 шт</div></div>
+                                <div class="item"><div class="k">Рейтинг</div><div class="v" th:text="${product.rating}">0</div></div>
+                                <div class="item"><div class="k">Идентификатор</div><div class="v" th:text="${#strings.substring(product.id, 0, 8)}">id</div></div>
+                                <div class="item"><div class="k">Лицензия</div><div class="v">Коммерческая</div></div>
+                                <div class="item"><div class="k">Обновление</div><div class="v">Ежемесячно</div></div>
+                            </div></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="related" th:if="${!#lists.isEmpty(related)}">
+                    <h2>Похожие датасеты</h2>
+                    <div class="carousel">
+                        <article class="product-card" th:each="p : ${related}">
+                            <div class="image">
+                                <a th:href="@{/products/{id}(id=${p.id})}">
+                                    <img th:src="${#lists.isEmpty(p.images) ? '' : p.images[0]}" th:alt="${p.title}"/>
+                                </a>
+                            </div>
+                            <div class="content">
+                                <h3 class="title"><a th:href="@{/products/{id}(id=${p.id})}" th:text="${p.title}">Название</a></h3>
+                                <div class="price-row"><span class="price" th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</span></div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+</body>
+</html>

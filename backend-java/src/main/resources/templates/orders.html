@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Мои покупки')}"></head>
+<body>
+<div class="shell">
+    <header th:replace="~{fragments/header :: header('orders')}"></header>
+    <main>
+        <div class="container">
+            <div class="page">
+                <h1 class="page-title">Мои покупки</h1>
+                <div class="auth-error" th:if="${checkout}">Заказ оформлен. Спасибо за покупку!</div>
+
+                <div class="info" th:if="${#lists.isEmpty(orders)}">
+                    <div class="box">
+                        <h1>Покупок пока нет</h1>
+                        <p>Оформите первый заказ.</p>
+                        <div class="act"><a class="btn btn--primary btn--md" th:href="@{/}">В каталог</a></div>
+                    </div>
+                </div>
+
+                <div class="card order" th:each="o : ${orders}">
+                    <div class="oh">
+                        <div>
+                            <b th:text="'Заказ ' + ${#strings.substring(o.id, 0, 8)}">Заказ</b>
+                            <span style="color:var(--color-text-secondary)"
+                                  th:text="' · ' + ${#strings.replace(#strings.substring(o.createdAt.toString(), 0, 16), 'T', ' ')}">дата</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px">
+                            <span class="badge" th:text="${o.status}">paid</span>
+                            <span class="price" th:text="${#numbers.formatDecimal(o.total, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</span>
+                        </div>
+                    </div>
+                    <div class="oitem" th:each="item : ${o.items}">
+                        <div class="grow">
+                            <div class="oi-name" th:text="${item.title}">Название</div>
+                            <div class="oi-sub" th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 2, 'POINT')} + ' ₽ × ' + ${item.quantity} + ' = ' + ${#numbers.formatDecimal(item.lineTotal, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</div>
+                        </div>
+                        <div class="order-actions" th:if="${item.productId != null}">
+                            <a class="btn btn--secondary-outline btn--sm"
+                               th:href="@{/products/{id}(id=${item.productId})}">Открыть</a>
+                            <form method="post" th:action="@{/downloads/{id}(id=${item.productId})}" class="inline-form">
+                                <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                <button class="btn btn--primary btn--sm" type="submit">Скачать</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+</body>
+</html>
