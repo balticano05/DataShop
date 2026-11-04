@@ -1,0 +1,67 @@
+services:
+  app:
+    build:
+      context: ./backend-java
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-shop}"
+      DB_POOL_SIZE: "${DB_POOL_SIZE:-10}"
+      REDIS_URL: redis://redis:6379
+      CACHE_TTL_SECONDS: "${CACHE_TTL_SECONDS:-90}"
+      JWT_SECRET: "${JWT_SECRET:?JWT_SECRET must be set in .env}"
+      JWT_EXPIRES_IN: "${JWT_EXPIRES_IN:-1h}"
+      COOKIE_SECURE: "${COOKIE_SECURE:-false}"
+      CORS_ORIGINS: "${CORS_ORIGINS:-http://localhost:5173}"
+      CLOUDINARY_URL: "${CLOUDINARY_URL:-}"
+      UPLOADS_DIR: /app/uploads
+      SEED_ENABLED: "${SEED_ENABLED:-true}"
+      SEED_ADMIN_EMAIL: "${SEED_ADMIN_EMAIL:-admin@datashop.local}"
+      SEED_ADMIN_PASSWORD: "${SEED_ADMIN_PASSWORD:-Admin12345!}"
+    volumes:
+      - uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:-postgres}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:-postgres}"
+      POSTGRES_DB: "${POSTGRES_DB:-shop}"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "allkeys-lru"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  redis-data:
+  uploads:
