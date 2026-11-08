@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Каталог')}"></head>
+<body>
+<div class="shell">
+    <header th:replace="~{fragments/header :: header('catalog')}"></header>
+    <main>
+        <div class="container">
+            <div class="page">
+                <div class="heading">
+                    <h1>Датасеты</h1>
+                    <p>Готовые наборы данных для аналитики, ML и исследований</p>
+                </div>
+
+                <div class="panel">
+                    <form method="get" th:action="@{/}" class="filters">
+                        <div class="grid">
+                            <div class="section">
+                                <span>Поиск</span>
+                                <div class="input">
+                                    <input name="search" th:value="${query.search}" placeholder="Название или описание"/>
+                                </div>
+                            </div>
+                            <div class="section">
+                                <span>Сортировка</span>
+                                <div class="input">
+                                    <select name="sort_by">
+                                        <option value="created_at" th:selected="${query.sortBy.requestValue() == 'created_at'}">Новые</option>
+                                        <option value="price" th:selected="${query.sortBy.requestValue() == 'price'}">Цена</option>
+                                        <option value="rating" th:selected="${query.sortBy.requestValue() == 'rating'}">Рейтинг</option>
+                                        <option value="title" th:selected="${query.sortBy.requestValue() == 'title'}">Название</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="section">
+                                <span>Порядок</span>
+                                <div class="input">
+                                    <select name="order">
+                                        <option value="desc" th:selected="${query.order.value() == 'desc'}">По убыванию</option>
+                                        <option value="asc" th:selected="${query.order.value() == 'asc'}">По возрастанию</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="section">
+                                <span>Цена от</span>
+                                <div class="input"><input name="min_price" type="number" min="0" step="0.01" th:value="${query.minPrice}"/></div>
+                            </div>
+                            <div class="section">
+                                <span>Цена до</span>
+                                <div class="input"><input name="max_price" type="number" min="0" step="0.01" th:value="${query.maxPrice}"/></div>
+                            </div>
+                            <div class="section">
+                                <span>Минимальный рейтинг</span>
+                                <div class="input"><input name="min_rating" type="number" min="0" max="5" step="0.1" th:value="${query.minRating}"/></div>
+                            </div>
+                        </div>
+                        <div class="filter-actions">
+                            <a class="btn btn--secondary-outline btn--md" th:href="@{/}">Сбросить</a>
+                            <button class="btn btn--primary btn--md" type="submit">Применить</button>
+                        </div>
+                    </form>
+                    <div class="controls">
+                        <span class="count" th:text="'Показано: ' + ${meta.totalItems}">Показано: 0</span>
+                    </div>
+                </div>
+
+                <div class="grid-products" th:if="${!#lists.isEmpty(products)}">
+                    <article class="product-card" th:each="p : ${products}">
+                        <div class="image">
+                            <a th:href="@{/products/{id}(id=${p.id})}">
+                                <img th:src="${#lists.isEmpty(p.images) ? '' : p.images[0]}"
+                                     th:alt="${p.title}" loading="lazy"/>
+                            </a>
+                        </div>
+                        <div class="content">
+                            <h3 class="title">
+                                <a th:href="@{/products/{id}(id=${p.id})}" th:text="${p.title}">Название</a>
+                            </h3>
+                            <div class="rating">
+                                <span class="stars"><span class="base">★★★★★</span></span>
+                                <span th:text="'(' + ${p.rating} + ')'">(0)</span>
+                            </div>
+                            <div class="price-row">
+                                <span class="price" th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 2, 'POINT')} + ' ₽'">0 ₽</span>
+                            </div>
+                            <div class="row between">
+                                <span class="category">Датасет</span>
+                                <span class="stock-pill" th:text="${p.stockQuantity} + ' шт'">0 шт</span>
+                            </div>
+                            <form method="post" th:action="@{/cart/items}">
+                                <input type="hidden" name="_csrf" th:value="${csrfToken}"/>
+                                <input type="hidden" name="productId" th:value="${p.id}"/>
+                                <input type="hidden" name="quantity" value="1"/>
+                                <input type="hidden" name="next" value="/"/>
+                                <button class="btn btn--primary btn--md card-add" type="submit">В корзину</button>
+                            </form>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="info" th:if="${#lists.isEmpty(products)}">
+                    <div class="box">
+                        <h1>Ничего не найдено</h1>
+                        <p>Измените параметры поиска или фильтры.</p>
+                    </div>
+                </div>
+
+                <div class="pager">
+                    <a class="btn btn--secondary-outline btn--md" th:if="${meta.currentPage > 1}"
+                       th:href="@{/(search=${query.search},min_price=${query.minPrice},max_price=${query.maxPrice},min_rating=${query.minRating},sort_by=${query.sortBy.requestValue()},order=${query.order.value()},page=${meta.currentPage - 1},limit=${meta.limit})}">← Назад</a>
+                    <span th:text="'Стр. ' + ${meta.currentPage} + ' из ' + ${meta.totalPages} + ' · всего ' + ${meta.totalItems}">Стр. 1 из 1</span>
+                    <a class="btn btn--secondary-outline btn--md" th:if="${meta.currentPage < meta.totalPages}"
+                       th:href="@{/(search=${query.search},min_price=${query.minPrice},max_price=${query.maxPrice},min_rating=${query.minRating},sort_by=${query.sortBy.requestValue()},order=${query.order.value()},page=${meta.currentPage + 1},limit=${meta.limit})}">Вперёд →</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</div>
+</body>
+</html>

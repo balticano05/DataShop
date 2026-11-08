@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: datashop
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: main
+    dockerfilePath: ./backend-java/Dockerfile
+    dockerContext: ./backend-java
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLOUDINARY_URL
+        sync: false
+      - key: SEED_ADMIN_PASSWORD
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: datashop-redis
+          property: connectionString
+      - key: SEED_ENABLED
+        value: "true"
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: DB_POOL_SIZE
+        value: "5"
+      - key: UPLOADS_DIR
+        value: /app/uploads
+
+  - type: keyvalue
+    name: datashop-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+    ipAllowList: []
