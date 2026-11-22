@@ -1,0 +1,24 @@
+databaseChangeLog:
+  # SQL lives in separate files under changes/sql, split by responsibility.
+  # Keep existing databases compatible after moving SQL out of this changelog.
+  - changeSet:
+      id: 001-init-schema
+      author: datashop
+      logicalFilePath: db/changelog/changes/001-init-schema.sql
+      validCheckSum: ANY
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/sql/001-users.sql
+            relativeToChangelogFile: false
+        - sqlFile:
+            path: db/changelog/changes/sql/002-products.sql
+            relativeToChangelogFile: false
+        - sqlFile:
+            path: db/changelog/changes/sql/003-promo-codes.sql
+            relativeToChangelogFile: false
+        - sqlFile:
+            path: db/changelog/changes/sql/004-carts.sql
+            relativeToChangelogFile: false
+        - sqlFile:
+            path: db/changelog/changes/sql/005-orders.sql
+            relativeToChangelogFile: false

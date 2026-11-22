@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-media-assets
+      author: datashop
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/sql/006-media-assets.sql
+            relativeToChangelogFile: false
