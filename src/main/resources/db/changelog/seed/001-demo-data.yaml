@@ -1,0 +1,15 @@
+databaseChangeLog:
+  # SQL lives in separate files under seed/sql, split by responsibility.
+  # Keep existing databases compatible after moving SQL out of this changelog.
+  - changeSet:
+      id: seed-demo-data
+      author: datashop
+      logicalFilePath: db/changelog/seed/001-demo-data.sql
+      validCheckSum: ANY
+      changes:
+        - sqlFile:
+            path: db/changelog/seed/sql/001-promo-codes.sql
+            relativeToChangelogFile: false
+        - sqlFile:
+            path: db/changelog/seed/sql/002-products.sql
+            relativeToChangelogFile: false

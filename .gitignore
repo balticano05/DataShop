@@ -6,14 +6,17 @@ out/
 .env.local
 .env.*.local
 
+# Local connection notes with database credentials.
+data.txt
+
 *.log
 
 .idea/
 .vscode/
+.gigaide/
 *.swp
 *.swo
 
-uploads/
 tmp/
 
 .DS_Store

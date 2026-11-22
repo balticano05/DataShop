@@ -1,0 +1,12 @@
+target/
+.git/
+.gitignore
+.gigaide/
+.idea/
+.vscode/
+docs/
+*.log
+.env
+.env.*
+docker-compose.yml
+README.md

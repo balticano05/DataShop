@@ -1,0 +1,24 @@
+meta {
+  name: Get Preview
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}{{previewUrl}}
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: image/*
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("immutable cache", function() {
+    expect(res.headers["cache-control"]).to.include("immutable");
+  });
+}

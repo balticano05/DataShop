@@ -1,0 +1,43 @@
+meta {
+  name: Upload Dataset
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/admin/media/dataset/{{productId}}
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:multipart-form {
+  file: @file(fixtures/dataset.csv)
+}
+
+script:post-response {
+  if (res.body && res.body.publicId) {
+    bru.setVar("datasetPublicId", res.body.publicId);
+  }
+}
+
+docs {
+  Uploads a dataset to Supabase Storage and attaches its path to the product from Create Product. The path is saved for the download request.
+}
+
+tests {
+  test("201 Created", function() {
+    expect(res.status).to.equal(201);
+    expect(res.body).to.have.property("publicId");
+  });
+  test("dataset stored in the datasets folder", function() {
+    expect(res.body.publicId).to.match(/^datasets\//);
+  });
+}

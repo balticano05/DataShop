@@ -1,0 +1,31 @@
+meta {
+  name: Invalid Promo
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/cart/apply-promo
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+body:json {
+  {
+    "code": "NOPE"
+  }
+}
+
+tests {
+  test("404 Not Found", function() {
+    expect(res.status).to.equal(404);
+  });
+}

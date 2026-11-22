@@ -1,0 +1,40 @@
+meta {
+  name: Upload Preview
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/admin/media/preview
+  body: multipartForm
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:multipart-form {
+  file: @file(fixtures/preview.png)
+}
+
+script:post-response {
+  if (res.body && res.body.url) {
+    bru.setVar("previewUrl", res.body.url);
+  }
+}
+
+tests {
+  test("201 Created", function() {
+    expect(res.status).to.equal(201);
+    expect(res.body).to.have.property("publicId");
+    expect(res.body).to.have.property("url");
+  });
+  test("preview is stored in the database", function() {
+    expect(res.body.url).to.match(/^\/media\/assets\/[0-9a-f-]{36}$/);
+  });
+}

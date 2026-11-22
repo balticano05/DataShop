@@ -1,0 +1,40 @@
+meta {
+  name: Login Customer
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+body:json {
+  {
+    "email": "{{customerEmail}}",
+    "password": "{{customerPassword}}"
+  }
+}
+
+script:post-response {
+  bru.setVar("customerToken", res.body.accessToken);
+}
+
+docs {
+  Run "Register Customer" first, or change customerEmail/customerPassword in the Local environment.
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body.accessToken).to.be.a("string");
+  });
+  test("customer role", function() {
+    expect(res.body.user.role).to.equal("customer");
+  });
+}

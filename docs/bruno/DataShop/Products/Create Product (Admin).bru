@@ -1,0 +1,47 @@
+meta {
+  name: Create Product (Admin)
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/products
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "title": "Bruno Test Dataset",
+    "description": "Dataset created by the Bruno API collection",
+    "price": 1499.00,
+    "rating": 4.5,
+    "stockQuantity": 20
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.id) {
+    bru.setVar("productId", res.body.id);
+    bru.setVar("deleteProductId", res.body.id);
+  }
+}
+
+tests {
+  test("201 Created", function() {
+    expect(res.status).to.equal(201);
+    expect(res.body.title).to.equal("Bruno Test Dataset");
+    expect(res.body.images.length).to.equal(3);
+    res.body.images.forEach(function(image) {
+      expect(image).to.match(/^\/media\/assets\/[0-9a-f-]{36}$/);
+    });
+  });
+}

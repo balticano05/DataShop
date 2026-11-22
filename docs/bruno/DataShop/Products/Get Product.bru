@@ -1,0 +1,28 @@
+meta {
+  name: Get Product
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/products/{{productId}}
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body.id).to.equal(bru.getVar("productId"));
+  });
+  test("at least three database images", function() {
+    expect(res.body.images.length).to.be.at.least(3);
+    res.body.images.forEach(function(image) {
+      expect(image).to.match(/^\/media\/assets\/[0-9a-f-]{36}$/);
+    });
+  });
+}

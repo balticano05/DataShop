@@ -1,0 +1,40 @@
+meta {
+  name: Login Admin
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+body:json {
+  {
+    "email": "{{adminEmail}}",
+    "password": "{{adminPassword}}"
+  }
+}
+
+script:post-response {
+  bru.setVar("adminToken", res.body.accessToken);
+}
+
+docs {
+  Uses the administrator created by the seed migration. The credentials must match .env.
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body.accessToken).to.be.a("string");
+  });
+  test("admin role", function() {
+    expect(res.body.user.role).to.equal("admin");
+  });
+}
