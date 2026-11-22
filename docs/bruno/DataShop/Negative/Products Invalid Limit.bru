@@ -1,0 +1,21 @@
+meta {
+  name: Products Invalid Limit
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/products?limit=1000
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("400 Bad Request", function() {
+    expect(res.status).to.equal(400);
+  });
+}

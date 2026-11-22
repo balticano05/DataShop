@@ -1,0 +1,29 @@
+meta {
+  name: Remove Item
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/api/cart/items/{{cartItemId}}
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+script:post-response {
+  bru.setVar("cartItemId", "");
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+}

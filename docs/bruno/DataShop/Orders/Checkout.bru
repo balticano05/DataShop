@@ -1,0 +1,33 @@
+meta {
+  name: Checkout
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/orders/checkout
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+script:post-response {
+  if (res.body && res.body.id) {
+    bru.setVar("orderId", res.body.id);
+  }
+}
+
+tests {
+  test("201 Created", function() {
+    expect(res.status).to.equal(201);
+    expect(res.body.status).to.equal("paid");
+    expect(res.body.items.length).to.be.at.least(1);
+  });
+}

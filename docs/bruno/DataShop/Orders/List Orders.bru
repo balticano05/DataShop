@@ -1,0 +1,32 @@
+meta {
+  name: List Orders
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/orders
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+script:post-response {
+  if (!bru.getVar("orderId") && res.body && res.body.length > 0) {
+    bru.setVar("orderId", res.body[0].id);
+  }
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body).to.be.an("array");
+  });
+}

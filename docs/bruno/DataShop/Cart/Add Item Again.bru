@@ -1,0 +1,45 @@
+meta {
+  name: Add Item Again
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/cart/items
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+body:json {
+  {
+    "productId": "{{productId}}",
+    "quantity": 1
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.items) {
+    const item = res.body.items.find((entry) => entry.productId === bru.getVar("productId"));
+    if (item) {
+      bru.setVar("cartItemId", item.id);
+    }
+  }
+}
+
+docs {
+  Re-adds an item after the delete test so checkout has a non-empty cart.
+}
+
+tests {
+  test("201 Created", function() {
+    expect(res.status).to.equal(201);
+  });
+}

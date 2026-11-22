@@ -1,0 +1,35 @@
+meta {
+  name: Create Product As Customer
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/products
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+body:json {
+  {
+    "title": "Forbidden product",
+    "description": "Customers must not create products",
+    "price": 100.00,
+    "rating": 1.0,
+    "stockQuantity": 1
+  }
+}
+
+tests {
+  test("403 Forbidden", function() {
+    expect(res.status).to.equal(403);
+  });
+}

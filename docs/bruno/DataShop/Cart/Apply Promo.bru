@@ -1,0 +1,35 @@
+meta {
+  name: Apply Promo
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/cart/apply-promo
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+body:json {
+  {
+    "code": "SAVE10"
+  }
+}
+
+tests {
+  test("201 Created", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("10 percent discount", function() {
+    expect(res.body.promoCode.code).to.equal("SAVE10");
+    expect(res.body.promoCode.discountPercentage).to.equal(10);
+  });
+}
