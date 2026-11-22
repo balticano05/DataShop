@@ -1,0 +1,24 @@
+meta {
+  name: Swagger UI
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/docs
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("Swagger UI markup", function() {
+    expect(res.body).to.include("swagger-ui");
+  });
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Get Cart With Promo
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/cart
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+    expect(res.body.promoCode.code).to.equal("SAVE10");
+  });
+  test("discount is applied", function() {
+    expect(res.body.total).to.be.below(res.body.subtotal);
+  });
+}

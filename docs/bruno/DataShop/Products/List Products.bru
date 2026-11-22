@@ -1,0 +1,34 @@
+meta {
+  name: List Products
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/products?page=1&limit=12
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+script:post-response {
+  if (res.body && res.body.items && res.body.items.length > 0) {
+    bru.setVar("productId", res.body.items[0].id);
+  }
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("pagination shape", function() {
+    expect(res.body).to.have.property("items");
+    expect(res.body.meta).to.have.property("total_items");
+    expect(res.body.meta).to.have.property("total_pages");
+    expect(res.body.meta).to.have.property("current_page");
+    expect(res.body.meta).to.have.property("limit");
+  });
+}

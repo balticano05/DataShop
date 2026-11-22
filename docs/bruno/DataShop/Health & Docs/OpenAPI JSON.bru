@@ -1,0 +1,25 @@
+meta {
+  name: OpenAPI JSON
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/openapi.json
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("OpenAPI document", function() {
+    expect(res.body).to.have.property("openapi");
+    expect(res.body).to.have.property("paths");
+  });
+}

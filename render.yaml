@@ -5,32 +5,38 @@ services:
     plan: free
     region: frankfurt
     branch: main
-    dockerfilePath: ./backend-java/Dockerfile
-    dockerContext: ./backend-java
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /api/health
     autoDeployTrigger: commit
     envVars:
       - key: DATABASE_URL
         sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_EMAIL
+        sync: false
+      - key: SUPABASE_STORAGE_PASSWORD
+        sync: false
       - key: JWT_SECRET
         generateValue: true
-      - key: CLOUDINARY_URL
-        sync: false
       - key: SEED_ADMIN_PASSWORD
         sync: false
-      - key: REDIS_URL
-        fromService:
-          type: keyvalue
-          name: datashop-redis
-          property: connectionString
       - key: SEED_ENABLED
         value: "true"
       - key: COOKIE_SECURE
         value: "true"
       - key: DB_POOL_SIZE
         value: "5"
-      - key: UPLOADS_DIR
-        value: /app/uploads
+      - key: REDIS_URL
+        fromService:
+          type: keyvalue
+          name: datashop-redis
+          property: connectionString
 
   - type: keyvalue
     name: datashop-redis

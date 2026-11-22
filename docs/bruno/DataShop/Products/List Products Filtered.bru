@@ -1,0 +1,25 @@
+meta {
+  name: List Products Filtered
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/products?page=1&limit=5&search=Tesla&min_price=100&max_price=5000&min_rating=4&sort_by=price&order=asc
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("200 OK", function() {
+    expect(res.status).to.equal(200);
+  });
+  test("filters and sorting are accepted", function() {
+    expect(res.body.meta.current_page).to.equal(1);
+    expect(res.body.meta.limit).to.equal(5);
+  });
+}

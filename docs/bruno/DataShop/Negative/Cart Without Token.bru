@@ -1,0 +1,21 @@
+meta {
+  name: Cart Without Token
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/cart
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+}
+
+tests {
+  test("401 Unauthorized", function() {
+    expect(res.status).to.equal(401);
+  });
+}

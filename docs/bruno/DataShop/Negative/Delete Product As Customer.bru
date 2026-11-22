@@ -1,0 +1,25 @@
+meta {
+  name: Delete Product As Customer
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/api/products/{{deleteProductId}}
+  body: none
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+tests {
+  test("403 Forbidden", function() {
+    expect(res.status).to.equal(403);
+  });
+}

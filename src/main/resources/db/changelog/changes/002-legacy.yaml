@@ -1,0 +1,53 @@
+databaseChangeLog:
+  # SQL lives in separate files under changes/sql/legacy.
+  # Keep existing databases compatible after moving SQL out of this changelog.
+  - changeSet:
+      id: 002-migrate-legacy-users-role
+      author: datashop
+      logicalFilePath: db/changelog/changes/002-legacy.xml
+      validCheckSum: ANY
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/sql/legacy/001-migrate-legacy-users-role.sql
+            relativeToChangelogFile: false
+            splitStatements: false
+  - changeSet:
+      id: 002-migrate-legacy-orders-status
+      author: datashop
+      logicalFilePath: db/changelog/changes/002-legacy.xml
+      validCheckSum: ANY
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/sql/legacy/002-migrate-legacy-orders-status.sql
+            relativeToChangelogFile: false
+            splitStatements: false
+  - changeSet:
+      id: 002-migrate-legacy-products-images
+      author: datashop
+      logicalFilePath: db/changelog/changes/002-legacy.xml
+      validCheckSum: ANY
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/sql/legacy/003-migrate-legacy-products-images.sql
+            relativeToChangelogFile: false
+            splitStatements: false
+  - changeSet:
+      id: 002-ensure-users-role-check
+      author: datashop
+      logicalFilePath: db/changelog/changes/002-legacy.xml
+      validCheckSum: ANY
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/sql/legacy/004-ensure-users-role-check.sql
+            relativeToChangelogFile: false
+            splitStatements: false
+  - changeSet:
+      id: 002-ensure-orders-status-check
+      author: datashop
+      logicalFilePath: db/changelog/changes/002-legacy.xml
+      validCheckSum: ANY
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/sql/legacy/005-ensure-orders-status-check.sql
+            relativeToChangelogFile: false
+            splitStatements: false

@@ -1,0 +1,44 @@
+meta {
+  name: Add Item
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/cart/items
+  body: json
+  auth: bearer
+}
+
+headers {
+  Accept: application/json
+}
+
+auth:bearer {
+  token: {{customerToken}}
+}
+
+body:json {
+  {
+    "productId": "{{productId}}",
+    "quantity": 2
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.items) {
+    const item = res.body.items.find((entry) => entry.productId === bru.getVar("productId"));
+    if (item) {
+      bru.setVar("cartItemId", item.id);
+    }
+  }
+}
+
+tests {
+  test("201 Created", function() {
+    expect(res.status).to.equal(201);
+  });
+  test("cart contains the product", function() {
+    expect(res.body.items.some((item) => item.productId === bru.getVar("productId"))).to.equal(true);
+  });
+}
